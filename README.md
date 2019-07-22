@@ -1,9 +1,8 @@
 
 # Toou-2D
 
-简称`T2D`，基于`Qt`跨平台技术的`2D`轻量级Ui引擎，它使得App可以快速开发与构建。K2D全新封装了常用控件，包括Toast，Dialog，Popover，AwesomeIcon等等，大部分控件我们已经放弃了Qt的Controls 及 Controls 2，在不需要重启App的情况实现一键换肤。T2D提供了丰富、全面的使用文档，Api查阅快速方便。
-已经集成最新版本 Awesome 4.7
-
+简称`T2D`，基于`Qt`跨平台技术的`2D`轻量级Ui引擎，它使得App可以快速开发与构建。K2D全新封装了常用控件，包括`Toast`，`Dialog`，`Popover`，`AwesomeIcon`等等，大部分控件我们已经放弃了Qt的Controls 及 Controls 2，在不需要重启App的情况实现一键换肤。T2D提供了丰富、全面的使用文档，Api查阅快速方便。已经集成最新版本 `Font Awesome 4.7`
+![](http://showfl.com/t2dsample/toou2d.gif)
 ## 如何使用 example
 
 1. 将项目clone到本地，使用Qt Create打开Toou-2D.pro
