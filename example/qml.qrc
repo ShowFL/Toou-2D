@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>res/toou_logo.jpg</file>
+        <file>res/imgdialog.png</file>
+        <file>qml/ButtonDemo.qml</file>
+        <file>qml/MessageDemo.qml</file>
+        <file>qml/SoeasyDemo.qml</file>
+        <file>qml/ThemeListDemo.qml</file>
+        <file>qml/Home.qml</file>
+        <file>qml/Topbar.qml</file>
+        <file>qml/Bottombar.qml</file>
+        <file>qml/Menubar.qml</file>
+        <file>qml/FpsDemo.qml</file>
+        <file>qml/AwesomeIcon.qml</file>
+    </qresource>
+</RCC>
