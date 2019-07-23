@@ -6,8 +6,9 @@
 <br>![](http://showfl.com/t2dsample/toou2d.gif)
 ## 如何使用 example
 
-1. 将项目clone到本地，使用Qt Create打开Toou-2D.pro
-2. 运行即可。
+1. 需要Qt 5.9.6 或更高版本。
+2. 将项目clone到本地，使用Qt Create打开Toou-2D.pro
+3. 运行即可。
 
 ## 如何构建及编译
 
