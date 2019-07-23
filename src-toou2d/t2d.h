@@ -12,11 +12,6 @@ class T2D : public QObject
     Q_ENUMS(AwesomeType)
     Q_ENUMS(TButtonType)
 public:
-    enum class TButtonType{
-        Btn_Ok,
-        Btn_Cancel,
-        Btn_Save,
-    };
 
     enum class IconPosition{
         IconLeft                   = 0x001,
@@ -25,7 +20,7 @@ public:
         IconOnly                   ,
     };
 
-    //已经支持最新的4.7.0   675个图标
+    //已经支持最新的4.7.0   785个图标
     //http://www.fontawesome.com.cn/faicons/
     enum class AwesomeType{
         FA_glass 			= 0xf000,
