@@ -13,12 +13,12 @@
 * 提供丰富Demo、全面的使用文档，Api查阅快速方便。[`进阶学习必备`](#)开源框架！
 
 * 已经集成最新版 [`Font Awesome 4.7`](#)
-<br>
+<br> </br>
 
 ## Demo 效果
 
 ![](http://showfl.com/t2dsample/toou2d.gif)
-<br>
+<br> </br>
 
 ## 运行 Demo 快速开始
 
@@ -29,7 +29,7 @@
 *支持 macOS ,Windows 构建，可发布到 macOS,Windows,iOS,Android等多平台。*
 
 [iOS 使用特殊细节](#)
-<br>
+<br> </br>
 
 ## 如何构建并使用
 
@@ -52,7 +52,7 @@ CONFIG += staticlib
 ```
 
 [参考Wiki 具体配置方法](#)
-<br>
+<br> </br>
 
 
 ## 自定义主题
@@ -62,7 +62,7 @@ CONFIG += staticlib
 在src-toou2d中，我们为您配置了两款默认皮肤。
 
 [参考Wiki 自制一套皮肤](#)
-<br>
+<br> </br>
 
 ## 让你的控件也支持主题切换
 
@@ -84,25 +84,33 @@ Rectangle{
 ```
 
 [参考Wiki 更高级的玩法](#)
-<br>
+<br> </br>
 
 ## 设备运行测试
 
 | 平台 | 结果 |
 | --- | --- |
+| Windows 7 | OK |
+| Windows 10 | OK |
+| macOS 10.11 | OK |
+| macOS 10.14 | OK |
 | Android 华为 4.4| OK |
 | Android 小米 7.0| OK |
+| Android Mi Pad 8.0| OK |
 | Android vivo 8.0| OK |
 | iOS iPhone 6 | OK |
 | iOS iPhone 8 plus | OK |
 | iOS iPhone XR | OK |
 | iOS iPad mini | OK |
-<br>
+<br> </br>
 
 ## 一张图读懂 Toou 2D
 
 ![](http://showfl.com/t2d.png)
 
+## 值得回忆的时刻
+
+2019年7月22日 入驻Github 建立项目公开T2D源码。
 
 ## 值得一提的事情
-[`Toou`](http://www.toou.net) 感谢您的关注。记得点星哦！~
+[`Toou`](http://www.toou.net) 感谢您的关注,记得点星哦！~
