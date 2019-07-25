@@ -1,10 +1,10 @@
-> # Toou 2D  拿来即用，为简单而生。
+# Toou 2D  拿来即用，为简单而生。
 
 ![](https://img.shields.io/badge/Version-Alpha-red) ![](https://img.shields.io/badge/Build-passing-green) ![](https://img.shields.io/badge/iOS-passing-green) ![](https://img.shields.io/badge/Android-passing-green) ![](https://img.shields.io/badge/macOS-passing-green) ![](https://img.shields.io/badge/Windows-passing-green) 
 
 简称`T2D`，基于Qt Qml跨平台技术的2D轻量级Ui引擎，无需深入学习，简单易用可`拿来即用`
 
-* 业务逻辑与界面主题设计分离，可通过修改变量**`自定义主题`**界面。内置多种主题，方便更高级的扩展还支持**`自定义主题属性`**，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现`一键换肤`
+* 业务逻辑与界面主题设计分离，可通过修改变量`自定义主题`界面。内置多种主题，方便更高级的扩展还支持`自定义主题属性`，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现`一键换肤`
 
 * 设计师可以很容易理解并设计出精美的主题，这样会提高项目整体的开发效率。让开发人员专注于业务逻辑的实现而非技术细节，而且`方便维护升级`
 
@@ -14,7 +14,7 @@
 
 * 已经集成最新版 `Font Awesome 4.7`
 
-> ## Demo 效果
+## Demo 效果
 
 ![](http://showfl.com/t2dsample/toou2d.gif)
 
@@ -28,7 +28,7 @@
 
 [iOS 使用特殊细节](#)
 
-> ## 如何构建并使用
+## 如何构建并使用
 
 支持编译Qml插件动态库，及静态库两种形式供您的项目使用。
 1. 使用Qt creator 打开 src-toou2d/Toou2D.pro
@@ -51,7 +51,7 @@ CONFIG += staticlib
 [参考Wiki 具体配置方法](#)
 
 
-> ## 自定义主题
+## 自定义主题
 
 首先T2D的皮肤数据全部定义在 ini文件中，这些ini配置文件可以写在应用内也可以是应用的外部。通过修改ini节点属性及简单通用的规则即可实现完美的皮肤制作。
 
@@ -59,7 +59,7 @@ CONFIG += staticlib
 
 [参考Wiki 自制一套皮肤](#)
 
-> ## 让你的控件也支持主题切换
+## 让你的控件也支持主题切换
 
 TThemeBinder控件与主题样式数据绑定在一起。废话不说看代码，如下:
 
@@ -80,7 +80,7 @@ Rectangle{
 
 [参考Wiki 更高级的玩法](#)
 
-> ## 设备运行测试
+## 设备运行测试
 
 | 平台 | 结果 |
 | --- | --- |
@@ -92,10 +92,11 @@ Rectangle{
 | iOS iPhone XR | OK |
 | iOS iPad mini | OK |
 
-> ## 一张图读懂 Toou 2D
+
+## 一张图读懂 Toou 2D
 
 ![](http://showfl.com/t2d.png)
 
 
-> # 值得一提的事情
+## 值得一提的事情
 [`Toou`](http://www.toou.net) 感谢您的关注。记得点星哦！~
