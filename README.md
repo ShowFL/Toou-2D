@@ -1,47 +1,86 @@
+> # Toou 2D  拿来即用，为简单而生。
 
-# Toou-2D
+![](https://img.shields.io/badge/Version-Alpha-red) ![](https://img.shields.io/badge/Build-passing-green) ![](https://img.shields.io/badge/iOS-passing-green) ![](https://img.shields.io/badge/Android-passing-green) ![](https://img.shields.io/badge/macOS-passing-green) ![](https://img.shields.io/badge/Windows-passing-green) 
 
-简称`T2D`，基于`Qt`跨平台技术的`2D`轻量级Ui引擎，它使得App可以快速开发与构建。T2D全新封装了常用控件，包括`Toast`，`Dialog`，`Popover`，`AwesomeIcon`等等，大部分控件我们已经放弃了Qt的Controls 及 Controls 2，不需要重启App即实现一键换肤。 T2D提供了丰富、全面的使用文档，Api查阅快速方便。(Wiki正在努力建设中，文档会陆续开放)
-<br>已经集成最新版本 `Font Awesome 4.7`
-<br>![](http://showfl.com/t2dsample/toou2d.gif)
-## 如何使用 example
+简称`T2D`，基于Qt Qml跨平台技术的2D轻量级Ui引擎，无需深入学习，简单易用可*`拿来即用`*
 
-1. 需要Qt 5.9.6 或更高版本。
-2. 将项目clone到本地，使用Qt Create打开Toou-2D.pro
-3. 运行即可。
+* 业务逻辑与界面主题设计分离，可通过修改变量*`自定义主题`*界面。内置多种主题，方便更高级的扩展还支持*`自定义主题属性`*，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现*`一键换肤`*
 
-## 如何构建及编译
+* 设计师可以很容易理解并设计出精美的主题，这样会提高项目整体的开发效率。让开发人员专注于业务逻辑的实现而非技术细节，而且*`方便维护升级`*
 
-支持编译Qml插件动态库，及静态库两种形式使用。
-1. 使用Qt Creator打开项目。
-2. 根据自身使用需求修改Toou2D.pro 
+* 统一交互规范，封装了常用控件，其中包括*`Toast`*，*`Dialog`*，*`Popover`*，*`AwesomeIcon`*等等，每个控件的开发都是以服务实际项目需要为目的，大部分控件我们已经放弃了Qt Controls 及 Controls 2 来提高性能。
+
+* 提供丰富Demo、全面的使用文档，Api查阅快速方便。*`进阶学习必备`*开源框架！
+
+* 已经集成最新版 *`Font Awesome 4.7`*
+
+> ## Demo 效果
+
+![](http://showfl.com/t2dsample/toou2d.gif)
+
+> ## 运行 Demo 快速开始
+
+需要Qt 5.9.6 或更高版本。
+1. 将项目clone到本地 使用Qt creator 打开 Toou-2D.pro
+2. 运行即可即可看到demo 预览效果。
+
+*支持 macOS ,Windows 构建，可发布到 macOS,Windows,iOS,Android等多平台。*
+
+[iOS 使用特殊细节](#)
+
+> ## 如何构建并使用
+
+支持编译Qml插件动态库，及静态库两种形式供您的项目使用。
+1. 使用Qt creator 打开 src-toou2d/Toou2D.pro
+2. 开始构建即可
+
+* 默认为 Qml Plugin 动态库形式。无需任何修改。
+
 ```
 CONFIG  += install
-自动将编译后的qml plugin安装到Qt安装目录中。
+已编译好的 Qml Plugin 自动安装到Qt安装目录中，不需要配置你的项目pro省时省力。
 ```
+
+* 静态库形式
+
 ```
 CONFIG += staticlib
-只编译.a静态库到构建目录的bin文件夹里。不会自动安装。使用时需要在App pro中配置才可以使用。 
+编译后在构建目录的bin文件夹中。同时还需要在你的项目中自行配置pro文件
 ```
 
-- [详情请点击这里]()
-
-## Api文档查阅
-
-T2D带有非常详细的使用文档及Api帮助文档。
-- [详情请点击这里]()
+[参考Wiki 具体配置方法](#)
 
 
-## 平台编译及运行测试结果
+> ## 自定义主题
 
-| 平台 | 编译结果 |运行结果 |
-| --- | --- |--- |
-| macOS | OK | OK |
-| Windows | OK | OK|
-| Android | OK | OK|
-| iOS | OK | OK|
+首先T2D的皮肤数据全部定义在 ini文件中，这些ini配置文件可以写在应用内也可以是应用的外部。通过修改ini节点属性及简单通用的规则即可实现完美的皮肤制作。
 
-#### 运行设备
+在src-toou2d中，我们为您配置了两款默认皮肤。
+
+[参考Wiki 自制一套皮肤](#)
+
+> ## 让你的控件也支持主题切换
+
+TThemeBinder控件与主题样式数据绑定在一起。废话不说看代码，如下:
+
+```
+//!当主题发展改变，Rectangle也会改变他的 color , width
+Rectangle{
+    width: theme.width;
+    color: theme.bgcolor;
+
+    TThemeBinder{
+        id:theme
+        type: "MRectangle"
+        property color bgcolor: bindingColor("bgcolor","blue");
+        property int   width: bindingInt("width",200);
+    }
+}
+```
+
+[参考Wiki 更高级的玩法](#)
+
+> ## 设备运行测试
 
 | 平台 | 结果 |
 | --- | --- |
@@ -53,7 +92,10 @@ T2D带有非常详细的使用文档及Api帮助文档。
 | iOS iPhone XR | OK |
 | iOS iPad mini | OK |
 
+> ##一张图读懂 Toou 2D
 
-## 值得一提的事情
+![](http://showfl.com/t2d.png)
 
+
+> # 值得一提的事情
 [`Toou`](http://www.toou.net) 感谢您的关注。记得点星哦！~
