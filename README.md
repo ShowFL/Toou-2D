@@ -22,7 +22,7 @@
 
 ## 运行 Demo 快速开始
 
-需要Qt 5.9.6 或更高版本。
+需要Qt 5.6 或更高版本。
 1. 将项目clone到本地 使用Qt creator 打开 Toou-2D.pro
 2. 运行即可即可看到demo 预览效果。
 
@@ -92,7 +92,7 @@ Rectangle{
 | --- | --- |
 | Windows 7 | OK |
 | Windows 10 | OK |
-| macOS 10.11 | OK |
+| macOS 10.12 | OK |
 | macOS 10.14 | OK |
 | Android 华为 4.4| OK |
 | Android 小米 7.0| OK |
