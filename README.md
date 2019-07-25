@@ -18,7 +18,7 @@
 
 ![](http://showfl.com/t2dsample/toou2d.gif)
 
-> ## 运行 Demo 快速开始
+## 运行 Demo 快速开始
 
 需要Qt 5.9.6 或更高版本。
 1. 将项目clone到本地 使用Qt creator 打开 Toou-2D.pro
