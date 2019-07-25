@@ -2,17 +2,17 @@
 
 ![](https://img.shields.io/badge/Version-Alpha-red) ![](https://img.shields.io/badge/Build-passing-green) ![](https://img.shields.io/badge/iOS-passing-green) ![](https://img.shields.io/badge/Android-passing-green) ![](https://img.shields.io/badge/macOS-passing-green) ![](https://img.shields.io/badge/Windows-passing-green) 
 
-简称`T2D`，基于Qt Qml跨平台技术的2D轻量级Ui引擎，无需深入学习，简单易用可[拿来即用](#)
+简称`T2D`，基于Qt Qml跨平台技术的2D轻量级Ui引擎，无需深入学习，简单易用可[`拿来即用`](#)
 
-* 业务逻辑与界面主题设计分离，可通过修改变量[自定义主题](#)界面。内置多种主题，方便更高级的扩展还支持[自定义主题属性](#)，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现[一键换肤](#)
+* 业务逻辑与界面主题设计分离，可通过修改变量[`自定义主题`](#)界面。内置多种主题，方便更高级的扩展还支持[`自定义主题属性`](#)，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现[`一键换肤`](#)
 
-* 设计师可以很容易理解并设计出精美的主题，这样会提高项目整体的开发效率。让开发人员专注于业务逻辑的实现而非技术细节，而且[方便维护升级](#)
+* 设计师可以很容易理解并设计出精美的主题，这样会提高项目整体的开发效率。让开发人员专注于业务逻辑的实现而非技术细节，而且[`方便维护扩展`](#)
 
-* 统一交互规范，封装了常用控件，其中包括[Toast](#)，[Dialog](#)，[Popover](#)，[AwesomeIcon](#)等等，每个控件的开发都是以服务实际项目需要为目的，大部分控件我们已经放弃了Qt Controls 及 Controls 2 来提高性能。
+* 统一交互规范，封装了常用控件，其中包括[`Toast`](#)，[`Dialog`](#)，[`Popover`](#)，[`AwesomeIcon`](#)等等，每个控件的开发都是以服务实际项目需要为目的，大部分控件我们已经放弃了Qt Controls 及 Controls 2 来提高性能。
 
-* 提供丰富Demo、全面的使用文档，Api查阅快速方便。[进阶学习必备](#)开源框架！
+* 提供丰富Demo、全面的使用文档，Api查阅快速方便。[`进阶学习必备`](#)开源框架！
 
-* 已经集成最新版 [Font Awesome 4.7](#)
+* 已经集成最新版 [`Font Awesome 4.7`](#)
 
 ## Demo 效果
 
