@@ -1,7 +1,6 @@
 # Toou 2D  拿来即用，为简单而生。
 
-![](https://img.shields.io/badge/Version-Alpha-red) ![](https://img.shields.io/badge/Build-passing-green) ![](https://img.shields.io/badge/iOS-passing-green) ![](https://img.shields.io/badge/Android-passing-green) ![](https://img.shields.io/badge/macOS-passing-green) ![](https://img.shields.io/badge/Windows-passing-green) 
-
+![](https://img.shields.io/badge/Version-Alpha-red) ![](https://img.shields.io/badge/Lines of code-3400-red) ![](https://img.shields.io/badge/Build-passing-green) ![](https://img.shields.io/badge/License-MIT-green)
 简称`T2D`，基于Qt Qml跨平台技术的2D轻量级Ui引擎，无需深入学习，简单易用可[`拿来即用`](#)
 
 * 业务逻辑与界面主题设计分离，可通过修改变量[`自定义主题`](#)界面。内置多种主题，方便更高级的扩展还支持[`自定义主题属性`](#)，为所欲为来满足项目的个性化需求。灵活的皮肤绑定机制、在不需要重启App即实现[`一键换肤`](#)
@@ -108,10 +107,17 @@ Rectangle{
 ## 一张图读懂 Toou 2D
 
 ![](http://showfl.com/t2d.png)
+<br> </br>
 
 ## 值得回忆的时刻
 
 2019年7月22日 入驻Github 建立项目公开T2D源码。
+<br> </br>
+
+## 找到我们
+
+![](http://showfl.com/github/image/toou_qq.jpg)
+<br> </br>
 
 ## 值得一提的事情
 [`Toou`](http://www.toou.net) 感谢您的关注,记得点星哦！~
