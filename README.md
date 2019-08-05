@@ -115,10 +115,6 @@ Rectangle{
 2019年7月22日 入驻Github 建立项目公开T2D源码。
 <br> </br>
 
-## 找到我们
-
-![](http://showfl.com/github/image/toou_qq.jpg)
-<br> </br>
 
 ## 值得一提的事情
 [`Toou`](http://www.toou.net) 感谢您的关注,记得点星哦！~
