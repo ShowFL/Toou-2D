@@ -1,35 +1,51 @@
 import QtQuick 2.6
 import Toou2D 1.0
 
+//图片按钮根据按钮状态的不同切换预设图片源。
+/*! TODO */
 TMouseArea{
-    id:button
+    id:toou2d_imgbutton
 
-    property alias theme: theme;
-    property string source: theme.source;
+    property alias theme: mtheme;
 
-    property Component contentItem: Image {
-        source: button.source;
+    property string source;
+
+    property string pressSource;
+
+    property double pressScale: 0.9;
+
+    states: TThemeManager.appThemeInvalid ? defstates : [];
+
+    Image {
+        id:image
+        anchors.fill: parent;
+        source: toou2d_imgbutton.source;
     }
 
-    Loader{
-        id:contentLoader;
-        scale:theme.scale;
-        sourceComponent: contentItem;
-        anchors.fill: parent;
-        onItemChanged: {
-            if(button.width == 0 || button.height == 0){
-                button.width = item.sourceSize.width;
-                button.height = item.sourceSize.height;
+    property list<State> defstates: [
+        State {
+            name: statetoString(TStateType.Pressed)
+            PropertyChanges {
+                target: image
+                scale: pressScale
+                source:{
+                    if(pressSource) return pressSource;
+                    return toou2d_imgbutton.source;
+                }
             }
         }
-    }
+    ]
 
     TThemeBinder{
-        id:theme
-        type:"ImageButton"
-        state: button.state;
-        property string source: bindingString("source","");
-        property double scale: bindingDouble("scale",1);
+        id:mtheme;
+        className: "TImageButton"
+        state:toou2d_imgbutton.state
+        target: image;
+
+        property string source: image.source;
+        property double scale:  image.scale;
+
+        Component.onCompleted: initialize();
     }
 
 }

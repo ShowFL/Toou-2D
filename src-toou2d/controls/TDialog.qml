@@ -1,265 +1,200 @@
 import QtQuick 2.6
 import Toou2D 1.0
-import QtGraphicalEffects 1.0
-QtObject {
-    id:dialog
-    signal opened();
-    signal closed();
 
-    signal buttonClicked(var button,var parameter);
+// 对话框
+//    在保留当前页面状态的情况下，告知用户并承载相关操作。
+//    TDialog{
 
-    property string buttons: "OK";
+//    }
+/*! TODO */
+TDialogBasic {
+    id:toou2d_dialog
+    signal triggered(var button,var item);
 
-    function isopening(){
-        return _private.fullLayout !== null;
-    }
+    property string titleText : "Hello Toou2D";
 
-    /*! This property holds the button tooltip. */
-    function open(parameter){
-        _private.createFullLayout();
-        _private.createPopup();
-        _private.createDialog(parameter,false);
-        opened();
-    }
+    property string contentText: "This is the default message"
 
-    function openCustom(parameter){
-        _private.createFullLayout();
-        _private.createPopup();
-        _private.createDialog(parameter,true);
-        opened();
-    }
+    property bool closeable: true
 
-    function close(){
-        if(isopening()){
-            _private.fullLayout.focus = true;
-            _private.fullLayout.destroy();
-        }
+    property bool contentCenter: true;
 
-        closed();
-    }
+    property int buttonSpacing: 15;
 
-    property QtObject _private: QtObject{
+    property Component headerComponent;
 
-        property Item fullLayout: null;
+    property Component footerComponent;
 
-        function createFullLayout(){
-            fullLayout = fullLayoutComponent.createObject(_root_window_);
-        }
+    default property Component contentComponent;
 
-        function createPopup(){
-            var popup = popbgComponent.createObject(fullLayout);
-            popup.opacity = 0.4;
-        }
+    property alias theme: mtheme;
 
-        function createDialog(parameter,custom){
-            var dialog = dialogComponent.createObject(fullLayout,{parameter:parameter,customContent:custom});
-            dialog.x = Qt.binding(function(){return (fullLayout.width - dialog.width) / 2});
-            dialog.y = Qt.binding(function(){return (fullLayout.height - dialog.height) / 2});
-            dialog.show();
-        }
+    property list<TDialogButton> buttons;
 
-        property Component fullLayoutComponent: Item{
-            anchors.fill: parent;
-            MouseArea{
-                anchors.fill: parent;
+    TObject{
+        id:_mprivate;
+
+        property var usercontentComponent;
+        property list<TDialogButton> default_buttons:[
+            TDialogButton{
+                lighter: true
+                label.text: "Enter"
+                label.font.bold: true
+                label.color: "#409EFF"
             }
+        ]
+    }
+
+    contentComponent: Item{
+        width: 240
+        height: 30
+        TLabel{
+            text: contentText
+            anchors.centerIn: parent;
+            theme.parent: mtheme;
+            theme.childName: "content.label"
         }
+    }
 
-        property Component popbgComponent:  TRectangle{
-            anchors.fill: parent;
-            color: "#000"
-            opacity: 0
+    bodyComponent: TRectangle{
+        theme.parent: mtheme
 
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 200
-                }
+        width:  clayout.width + 10;
+        height: clayout.height + 10;
+        border.width: 1;
+        border.color: "#DCDCDC"
+        color: "#FFF"
+        radius: 4
+
+        Column{
+            id:clayout
+            anchors.centerIn: parent;
+            spacing: 8;
+            Loader{
+                id:headerloader;
+                sourceComponent: headerComponent;
             }
-        }
-
-        property Component dialogComponent: Item{
-            opacity:0;
-            scale: 0
-            width: con.width + 10;
-            height: con.height + 10;
-            property var parameter;
-            property bool customContent;
-
-            //            RectangularGlow {
-            //                id: effect
-            //                anchors.fill: bgloader
-            //                glowRadius: 10
-            //                spread: 0
-            //                color: "#5d5d5d"
-            //                cornerRadius: 10
-            //            }
 
             Loader{
-                id:bgloader;
-                sourceComponent: backgroundItem;
-                anchors.fill: parent;
-                MouseArea{
-                    anchors.fill: parent;
-                }
+                id:contentloader;
+                clip: true
+                sourceComponent: contentComponent;
+                onLoaded:_mprivate.usercontentComponent = item;
             }
 
-            Column{
-                id:con
-                anchors.centerIn: parent;
-                Loader{
-                    id:titleLoader;
-                    sourceComponent: titleItem;
-                    z:1;
-                    onWidthChanged:{
-                        if(width>con.width)con.width = width;
-                    }
-                    onItemChanged: {
-                        if(item)item.parameter = parameter;
-                    }
-                }
+            Loader{
+                id:footerloader;
+                sourceComponent: footerComponent;
 
-                Loader{
-                    id:contentLoader;
-                    sourceComponent: customContent ? customContentItem : contentItem;
-                    onWidthChanged: {
-                        if(width>con.width)con.width = width;
-                    }
-                    onItemChanged: {
-                        if(item){
-                            item.parameter = parameter;
-                            if(item.width < 230){
-                                item.width = 230;
-                            }
-                            if(item.height < 30){
-                                item.height = 30;
-                            }
-                        }
-                    }
-                }
+                TDividerLine{
+                    width: parent.width;
+                    height: 1;
+                    visible: footerComponent != null;
+                    anchors.top: parent.top;
+                    color: "#EFEFEF"
 
-                Loader{
-                    id:bottomLoader;
-                    sourceComponent: bottomItem;
-                    z:1
-                    onWidthChanged: {
-                        if(width>con.width)con.width = width;
-                    }
-                    onItemChanged: {
-                        if(item)item.parameter = parameter;
-                    }
-
-
+                    theme.parent: mtheme
+                    theme.childName: "line"
                 }
             }
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: 100
-                }
+            Component.onCompleted: {
+                var maxwidth = Math.max(headerloader.width,contentloader.width,footerloader.width)
+                headerloader.width  = maxwidth;
+                contentloader.width = maxwidth;
+                footerloader.width  = maxwidth;
             }
-
-            Behavior on scale {
-                NumberAnimation {
-                    easing.type: Easing.OutBack;
-                    duration: 100
-                }
-            }
-
-            function show(){
-                titleLoader.width = contentLoader.width = bottomLoader.width = con.width;
-                opacity = 1;
-                scale = 1;
-            }
-
         }
     }
 
-    property Component backgroundItem: TRectangle{
-        color: "#fff"
-        radius: 2;
-        theme.enabled: false;
-    }
+    headerComponent: Item{
+        width: 260;
+        height: label.height < 30 ? 30 : label.height;
+        TLabel{
+            id:label
+            text: titleText
+            x:toou2d_dialog.contentCenter ? (parent.width - width) / 2 : 20;
+            anchors.verticalCenter: parent.verticalCenter
+            font.bold: true;
+            font.pixelSize: TPixelSizePreset.PH5
 
-    property Component titleItem: TRectangle{
-        id:titleitem;
-        property var parameter;
-        height: 30;
-        color: "#fff"
-        theme.enabled: false;
-
-        Rectangle{
-            anchors.bottom: titleitem.bottom;
-            width: parent.width;
-            height: 1;
-            color: "#efefef"
+            theme.parent: mtheme
+            theme.childName: "titlabel"
         }
 
-        Text {
-            text: parameter.title;
-            anchors.centerIn: parent;
-        }
-    }
+        TIconButton{
+            padding: 10
+            backgroundComponent: null;
+            visible: toou2d_dialog.closeable;
+            icon.type: TIconType.SVG
+            icon.source: "qrc:/net.toou.2d/resource/svg/close-px.svg";
+            icon.position: TPosition.Only;
+            anchors.right: parent.right;
+            anchors.rightMargin: 5;
+            anchors.verticalCenter: parent.verticalCenter;
+            onClicked: {
+                toou2d_dialog.hideAndClose();
+                closed();
+            }
 
-    property Component contentItem: TRectangle{
-        property var parameter;
-        width: text.contentWidth + 100;
-        height: text.contentHeight + 40;
-        theme.enabled: false;
-
-        Text {
-            id:text
-            text: parameter.message;
-            anchors.centerIn: parent;
-            font.pixelSize: 20;
+            theme.parent: mtheme
+            theme.childName: "closebtn"
         }
     }
 
-    property Component bottomItem: TRectangle{
-        id:btngroup;
-        property var parameter;
-        width: layout.width;
-        height: layout.children.length === 0 ? 0 : layout.height + 20;
-        theme.enabled: false;
-
+    footerComponent: Item{
+        id:_footer
+        width:  layout.width;
+        height: layout.height + 6;
+        property var md: buttons.length > 0 ? buttons : _mprivate.default_buttons;
         Row{
             id:layout
-            spacing: 10;
-            anchors.centerIn: btngroup;
-        }
+            spacing: toou2d_dialog.contentCenter ? 1 : buttonSpacing;
+            x:toou2d_dialog.contentCenter ? (parent.width - width) / 2 : parent.width - 10 - width;
+            anchors.verticalCenter: parent.verticalCenter;
+            Repeater{
+                model: md
+                delegate: TIconButton{
+                    width: toou2d_dialog.contentCenter ? _footer.width / md.length : 80;
+                    padding: 20
+                    backgroundComponent: null;
+                    theme.state: modelData.lighter ? "btnlighter" : "none"; //parent state? mtheme.state ?
+                    theme.className: "TDialog"
+                    theme.childName: "btn"
 
-        Component.onCompleted: {
-            if(buttons){
-                var list = buttons.split(",");
-                for(var i = 0 ; i < list.length;i++){
-                    var btn = _btn.createObject(layout,{text:list[i]});
+                    label.text:  modelData.label.text;
+                    label.font:  modelData.label.font;
+                    label.color: modelData.label.color;
+                    icon.type:   modelData.icon.type;
+                    icon.source: modelData.icon.source;
+                    icon.width:  modelData.icon.width;
+                    icon.height: modelData.icon.height;
+                    icon.color:  modelData.icon.color;
+                    anchors.verticalCenter: parent.verticalCenter;
+                    onClicked: triggered(modelData,_mprivate.usercontentComponent);
                 }
             }
         }
 
-        Component{
-            id:_btn;
-            TButton{
-                id:btn
-                theme.className: "tdialog"
-                width: 90;
-                onClicked: dialog.buttonClicked(btn,btngroup.parameter);
-                font.pixelSize: 15;
+        Repeater{
+            model: md.length - 1;
+            delegate: TDividerLine{
+                anchors.verticalCenter: parent.verticalCenter;
+                height: _footer.height * 0.8;
+                width: 1;
+                color: "#EFEFEF"
+                x:(index + 1) * (_footer.width / md.length)
+                visible: toou2d_dialog.contentCenter;
+
+                theme.parent: mtheme
+                theme.childName: "line"
             }
         }
     }
 
-    property Component customContentItem: TRectangle{
-        property var parameter;
-        width: text2.contentWidth + 100;
-        height: text2.contentHeight + 40;
-        theme.enabled: false;
+    TThemeBinder{
+        id:mtheme;
+        className: "TDialog";
 
-        Text {
-            id:text2
-            text: parameter.message;
-            anchors.centerIn: parent;
-            font.pixelSize: 20;
-        }
+        Component.onCompleted: initialize();
     }
-
 }

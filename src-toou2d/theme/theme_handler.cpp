@@ -4,6 +4,13 @@
 #include <QDebug>
 #include <QUrl>
 #include <QFile>
+/*!
+  \class ThemeHandler
+
+  \brief
+
+  \sa ThemeHandler
+  */
 ThemeHandler::ThemeHandler(const QString &name, const QString &rec_path):
     QObject(nullptr),
     m_name(name),
@@ -47,28 +54,41 @@ bool ThemeHandler::isLoad()
     return !m_data.isEmpty();
 }
 
-void ThemeHandler::findPropertyValue(const QString& type, const QString &property, const QString &state, const QString &objname, QVariant &value)
+void ThemeHandler::findPropertyValue(const QString &className, const QString& groupName,const QString& tpName, const QString& state, const QString& property, QVariant& result)
 {
-    if(!m_data.contains(type)){
+    if(!m_data.contains(className)){
         return ;
     }
-    QVariantMap* group = m_data.value(type);
+    QVariantMap* group = m_data.value(className);
 
     QStringList checkkeys;
-    checkkeys.append(objname + ":" + state);
+//    if(groupName.isEmpty()){
+//        checkkeys.append(":" + state);
+//        checkkeys.append(INI_GENERAL_STR);
+//    }else{
+//        checkkeys.append(groupName + ":" + state);
+//        checkkeys.append(groupName);
+//        checkkeys.append(INI_GENERAL_STR);
+//    }
+    checkkeys.append(groupName + ":" + state);
     checkkeys.append(":" + state);
-    checkkeys.append(objname);
-    checkkeys.append(INI_BASIC_STR);
+    checkkeys.append(groupName);
+    checkkeys.append(INI_GENERAL_STR);
 
+    QString pkey = property;
+    if(!tpName.isEmpty()){
+        pkey = tpName + "." + property;
+    }
+
+    //  qDebug() << pkey;
     foreach (QString key, checkkeys) {
         QVariantMap childv;
-
         if(group->contains(key)){
             childv = group->value(key).toMap();
         }
 
-        if(childv.contains(property)){
-            value.setValue(childv.value(property));
+        if(childv.contains(pkey)){
+            result.setValue(childv.value(pkey));
             break;
         }
     }
@@ -153,7 +173,7 @@ void ThemeHandler::parseINI(const QString& filename,QVariantMap& varmap)
             QRegExp rx("(.*)=(.*)");
             int pot = str.indexOf(rx);
             if(pot != -1){
-                curmap.insert(rx.cap(1).trimmed(),rx.cap(2).trimmed());
+                curmap.insert(rx.cap(1).trimmed(), rx.cap(2).trimmed());
             }
         }
 

@@ -1,0 +1,9 @@
+varying mediump vec2  qt_TexCoord0;
+uniform highp   float qt_Opacity;
+uniform highp   vec4  color;
+uniform lowp    sampler2D source;
+
+void main() {
+     highp vec4 toou2d_svg_color = texture2D(source, qt_TexCoord0);
+     gl_FragColor = vec4(mix(toou2d_svg_color.rgb/max(toou2d_svg_color.a, 0.00390625), color.rgb/max(color.a, 0.00390625), color.a) * toou2d_svg_color.a, toou2d_svg_color.a) * qt_Opacity;
+}

@@ -1,9 +1,14 @@
 import QtQuick 2.0
+import Toou2D 1.0
 
-ListElement {
+/*!todo*/
+TObject {
 
-    property string label ;
+    property string type: "item"  // item or group
 
-    property int icon ;
+    property string text;
 
+    property string iconSource;
+
+    property var    otherData;
 }

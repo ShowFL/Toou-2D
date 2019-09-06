@@ -1,63 +1,137 @@
 import QtQuick 2.6
 import Toou2D 1.0
 
+/*!
+    \qmltype TButton
+    \inqmlmodule QtQuick 2.6
+    \brief This is a normal button
+    \since 5.9.x
+    \ingroup qtquicktest
+
+
+    \code
+    TButton{
+        label.text : "TButton"
+    }
+    \endcode
+
+    \sa {QtTest::TestCase}{TestCase}, {Qt Quick Test Reference Documentation}
+*/
 TMouseArea{
-    id:button
-    width: contentLoader.width + margin;
-    height: contentLoader.height + margin;
+    id:toou2d_button
 
-    property int    margin: 20;
-    property string text: "Button"
-    property color color : theme.label_color;
-    property alias theme: theme;
-    property alias font: theme.font;
+    width:  contentLoader.width  + padding;
+    height: contentLoader.height + padding;
 
-    property Component backgroundItem: Rectangle{
-        enabled: false;
-        scale: theme.scale;
-        color: theme.bg_color;
-        radius: theme.bg_radius;
-        border.color: theme.border_color;
-        border.width: theme.border_width;
-    }
+    readonly property alias contentWidth: contentLoader.width;
+    readonly property alias contentHeight: contentLoader.height;
 
-    property Component contentItem :Text {
-        enabled: false;
-        text: button.text;
-        scale: theme.scale;
-        anchors.centerIn: parent;
-        color: button.color;
-        font:  theme.font;
-    }
+    property int   padding: 20;
+
+    property alias label: label;
+
+    property alias border: border;
+
+    property alias background: background
+
+    property int contentHAlign: Qt.AlignHCenter; //Qt.AlignHCenter 、 Qt.AlignLeft or Qt.AlignRight
+
+    property alias theme: toou2d_button_theme;
+
+    states:TThemeManager.appThemeInvalid || !theme.enabled ? defaultState : null;
+
+    property Component backgroundComponent;
+
+    property Component contentComponent;
 
     Loader{
         id:bgLoader;
-        anchors.fill: button;
-        sourceComponent: backgroundItem ;
-        visible: theme.bg_visible;
+        anchors.fill:    toou2d_button;
+        sourceComponent: backgroundComponent ;
+        visible:         toou2d_button.background.visible;
     }
 
     Loader{
         id:contentLoader;
-        sourceComponent: contentItem;
-        anchors.centerIn: button;
-        width:  item.width;
-        height: item.height;
+        sourceComponent: contentComponent;
+        anchors.verticalCenter: toou2d_button.verticalCenter;
+        x:{
+            if(contentHAlign == Qt.AlignLeft){
+                return padding;
+            }
+            else if(contentHAlign == Qt.AlignRight){
+                return toou2d_button.width - width - padding;
+            }
+
+            return (toou2d_button.width - width) / 2;
+        }
+    }
+
+    backgroundComponent: TRectangle{
+        enabled: false;
+        theme.parent: toou2d_button.theme
+        theme.childName: "bg"
+        theme.filterPropertyName: ["width","height"];
+
+        color:   toou2d_button.background.color;
+        radius:  toou2d_button.background.radius;
+        visible: toou2d_button.background.visible;
+        opacity: toou2d_button.background.opacity;
+
+        border.color: toou2d_button.border.color;
+        border.width: toou2d_button.border.width;
+
+        scale: toou2d_button_theme.scale;
+    }
+
+    contentComponent: TLabel {
+        enabled: false;
+        theme.parent: toou2d_button.theme
+        theme.childName: "label"
+
+        text:   toou2d_button.label.text;
+        color:  toou2d_button.label.color;
+        font:   toou2d_button.label.font;
+
+        anchors.centerIn: parent;
+        scale: toou2d_button_theme.scale;
+    }
+
+    TGadgetLabel{
+        id:label;
+        color: "#2D2D2D";
+        text: "TButton";
+    }
+
+    TGadgetBorder{
+        id:border;
+        width: 1;
+        color: "#DCDCDC";
+    }
+
+    TGadgetBackground{
+        id:background;
+        color: "#FCFCFC"
+        radius: 2;
     }
 
     TThemeBinder{
-        id:theme;
-        type:"Button"
-        state: button.state;
+        id:toou2d_button_theme;
+        className: "TButton"
+        state: toou2d_button.state;
 
-        property color  bg_color:     bindingColor("bg_color","#5d5d5d");
-        property int    bg_radius:    bindingInt("bg_radius",0);
-        property double bg_visible:   bindingBool("bg_visible",true);
-        property color  border_color: bindingColor("border_color","#5d5d5d");
-        property int    border_width: bindingInt("border_width",0);
-        property color  label_color:  bindingColor("label_color","#000");
-        property double scale:        bindingDouble("scale",1);
+        property double scale: 1;
+
+        Component.onCompleted: initialize();
     }
 
-
+    property list<State> defaultState :[
+        State {
+            name:statetoString(TStateType.Pressed)
+            PropertyChanges {
+                target: toou2d_button_theme
+                scale:0.92
+            }
+        }
+    ]
 }

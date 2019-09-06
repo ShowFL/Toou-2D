@@ -3,6 +3,13 @@
 #include <QDir>
 #include <QFileInfoList>
 
+/*!
+  \class ThemeManager
+
+  \brief
+
+  \sa ThemeManager
+  */
 ThemeManager* ThemeManager::m_instance = nullptr;
 QObject *ThemeManager::exampleQmlSingletonType(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -20,7 +27,7 @@ ThemeManager *ThemeManager::getInstance()
     return ThemeManager::m_instance;
 }
 
-void ThemeManager::setThemeImportPath(const QString &path)
+void ThemeManager::addAppThemePath(const QString &path)
 {
     QString dirpath(path);
     QRegExp rx("^qrc:");
@@ -33,11 +40,15 @@ void ThemeManager::setThemeImportPath(const QString &path)
 
     QFileInfoList files = dir.entryInfoList(QDir::Dirs);
     foreach (QFileInfo f, files) {
-        addTheme(f.fileName(),f.absoluteFilePath());
+        addAppTheme(f.fileName(),f.absoluteFilePath());
+    }
+
+    if(!this->m_startupThemeName.isEmpty() && m_themes.contains(m_startupThemeName)){
+        this->setAppTheme(m_startupThemeName);
     }
 }
 
-void ThemeManager::addTheme(const QString &name, const QString &qrc_path)
+void ThemeManager::addAppTheme(const QString &name, const QString &qrc_path)
 {
     ThemeHandler* theme = new ThemeHandler(name,qrc_path);
     if(!theme->isValid()){
@@ -49,26 +60,27 @@ void ThemeManager::addTheme(const QString &name, const QString &qrc_path)
     emit themeListChanged();
 }
 
-void ThemeManager::getPropertyData(const QString &type, const QString &property, const QString &state, const QString &className, QVariant &value)
+void ThemeManager::appStartupTheme(const QString &name)
 {
-    //Theme not loaded, need to load default.
-    if(m_theme.isEmpty() && m_themes.count() > 0){
-        if(m_themes.contains("default"))
-            setGlobalTheme("default");
-        else
-            setGlobalTheme(m_themes.keys().first());
-    }
-
-
-    ThemeHandler* theme = m_themes.value(m_theme);
-    if(theme){
-        theme->findPropertyValue(type,property,state,className,value);
+    m_startupThemeName = name;
+    if(m_themes.contains(name)){
+        this->setAppTheme(name);
     }
 }
 
-QString ThemeManager::globalTheme() const
+void ThemeManager::getPropertyData(const QString &className, const QString &groupName, const QString &tpName ,const QString &state,const QString &property, QVariant &result)
 {
-    return m_theme;
+    if(appThemeInvalid()) return;
+
+    ThemeHandler* theme = m_themes.value(m_themeName);
+    if(theme){
+        theme->findPropertyValue(className,groupName,tpName,state,property,result);
+    }
+}
+
+QString ThemeManager::appTheme() const
+{
+    return m_themeName;
 }
 
 QVariantList ThemeManager::themeList() const
@@ -80,15 +92,27 @@ QVariantList ThemeManager::themeList() const
     return list;
 }
 
-void ThemeManager::setGlobalTheme(const QString& theme)
+bool ThemeManager::appThemeInvalid() const
 {
-    if (m_theme == theme)
+    return appTheme().isEmpty();
+}
+
+void ThemeManager::setAppTheme(const QString& themeName)
+{
+    if (m_themeName == themeName)
         return;
 
-    ThemeHandler* t = m_themes.value(theme);
-    if(t && (t->isLoad() || t->load())){
-        bool sendemit = !theme.isEmpty();
-        m_theme = theme;
-        if(sendemit) emit globalThemeChanged();
+    if(themeName.isEmpty() || themeName == ""){
+        m_themeName.clear();
+        emit appThemeChanged();
+    }else{
+        ThemeHandler* t = m_themes.value(themeName);
+        if(t && (t->isLoad() || t->load())){
+            bool sendemit = !themeName.isEmpty();
+            m_themeName = themeName;
+            if(sendemit) emit appThemeChanged();
+        }
     }
+
+    emit appThemeInvalidChanged();
 }

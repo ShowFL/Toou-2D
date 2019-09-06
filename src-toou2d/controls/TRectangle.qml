@@ -1,28 +1,40 @@
 import QtQuick 2.6
 import Toou2D 1.0
 
+/* 矩形实体颜色区域 */
+/*! TODO */
 Rectangle {
-    color: theme.color;
+    id:toou2d_rect
 
-    radius: theme.radius;
+    property alias theme: mtheme;
 
-    border.color: theme.border_color;
+    color: "#FAFAFA";
 
-    border.width: theme.border_width;
+    border.width: 0;
 
-    property alias theme: theme;
+    border.color: Qt.darker(color,1.1)
 
     TThemeBinder{
-        id:theme;
+        id:mtheme;
+        state:     toou2d_rect.state;
+        className: "TRectangle";
 
-        type: "Rectangle"
+        property alias color:   toou2d_rect.color;
+        property alias width:   toou2d_rect.width;
+        property alias height:  toou2d_rect.height;
+        property alias radius:  toou2d_rect.radius;
+        property alias opacity: toou2d_rect.opacity;
 
-        property color color: bindingColor("color","#fff");
 
-        property int   radius: bindingInt("radius",0);
+        TThemeBinder{
+            target:     toou2d_rect.border;
+            childName:  "border";
 
-        property color border_color: bindingColor("border_color","#5d5d5d");
+            property int   width: toou2d_rect.border.width;
+            property color color: toou2d_rect.border.color;
+        }
 
-        property int   border_width: bindingInt("border_width",0);
+       Component.onCompleted: initialize();
     }
+
 }

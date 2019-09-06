@@ -1,6 +1,14 @@
 <RCC>
     <qresource prefix="/net.toou.2d">
         <file>resource/font/fontawesome-webfont.ttf</file>
+        <file>resource/font/svg.cso</file>
+        <file>resource/font/mask.cso</file>
+        <file>resource/svg/error.svg</file>
+        <file>resource/svg/info.svg</file>
+        <file>resource/svg/success.svg</file>
+        <file>resource/svg/warning.svg</file>
+        <file>resource/svg/close-px.svg</file>
+        <file>resource/svg/close.svg</file>
         <file>controls/TRectangle.qml</file>
         <file>controls/TFpsMonitor.qml</file>
         <file>controls/TButton.qml</file>
@@ -9,35 +17,36 @@
         <file>controls/TImageButton.qml</file>
         <file>controls/TImage.qml</file>
         <file>controls/TMouseArea.qml</file>
-        <file>controls/TToast.qml</file>
         <file>controls/TDialog.qml</file>
         <file>controls/TLabel.qml</file>
-        <file>resource/dark/AwesomeIcon.ini</file>
-        <file>resource/dark/Button.ini</file>
-        <file>resource/dark/IconButton.ini</file>
-        <file>resource/dark/Image.ini</file>
-        <file>resource/dark/ImageButton.ini</file>
-        <file>resource/dark/Label.ini</file>
-        <file>resource/dark/logo.png</file>
-        <file>resource/dark/main.ini</file>
-        <file>resource/dark/Rectangle.ini</file>
-        <file>resource/dark/sample.png</file>
-        <file>resource/default/AwesomeIcon.ini</file>
-        <file>resource/default/Button.ini</file>
-        <file>resource/default/IconButton.ini</file>
-        <file>resource/default/Image.ini</file>
-        <file>resource/default/ImageButton.ini</file>
-        <file>resource/default/Label.ini</file>
-        <file>resource/default/logo.png</file>
-        <file>resource/default/main.ini</file>
-        <file>resource/default/Rectangle.ini</file>
-        <file>resource/default/sample.png</file>
-        <file>controls/TPopover.qml</file>
+        <file>controls/TPopoverMenu.qml</file>
         <file>controls/TBadge.qml</file>
         <file>controls/TPopup.qml</file>
         <file>controls/TObject.qml</file>
         <file>controls/TPopoverElement.qml</file>
-        <file>resource/default/Popover.ini</file>
-        <file>resource/dark/Popover.ini</file>
+        <file>controls/TInputField.qml</file>
+        <file>controls/TNavigationBar.qml</file>
+        <file>controls/TNavigationElement.qml</file>
+        <file>controls/TSVGIcon.qml</file>
+        <file>controls/TCarousel.qml</file>
+        <file>controls/TFlickable.qml</file>
+        <file>controls/TScrollbarV.qml</file>
+        <file>controls/TScrollbarH.qml</file>
+        <file>controls/TCarouselElement.qml</file>
+        <file>controls/TDividerLine.qml</file>
+        <file>controls/TTag.qml</file>
+        <file>controls/TToast.qml</file>
+        <file>controls/TAvatar.qml</file>
+        <file>controls/TPagination.qml</file>
+        <file>controls/TBusyIndicator.qml</file>
+        <file>controls/TRadioBox.qml</file>
+        <file>controls/TCheckBox.qml</file>
+        <file>controls/TRadioBoxGroup.qml</file>
+        <file>controls/TSwitch.qml</file>
+        <file>controls/TProgressBar.qml</file>
+        <file>controls/TDialogButton.qml</file>
+        <file>controls/TIcon.qml</file>
+        <file>controls/TPopover.qml</file>
+        <file>controls/TDialogBasic.qml</file>
     </qresource>
 </RCC>

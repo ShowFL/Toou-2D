@@ -7,8 +7,8 @@
 #include <QSettings>
 #include <QFileInfo>
 
-#define INI_BASIC_STR "BASIC"
-#define INI_CONFIG_STR "CONFIG"
+#define INI_GENERAL_STR  "GENERAL"
+#define INI_CONFIG_STR   "CONFIG"
 #define INI_CONTROLS_STR "CONTROLS"
 
 class ThemeHandler : public QObject
@@ -22,7 +22,7 @@ public:
     bool load();
     bool isLoad();
 
-    void findPropertyValue(const QString &type, const QString& property, const QString& state, const QString& objname, QVariant& value);
+    void findPropertyValue(const QString &className, const QString& groupName, const QString &tpName, const QString& state, const QString& property, QVariant& result);
     const QMap<QString, QVariantMap *> &data();
     const QVariantMap &toQVariantMap();
 

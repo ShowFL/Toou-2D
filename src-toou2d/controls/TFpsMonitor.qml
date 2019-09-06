@@ -1,14 +1,17 @@
 import QtQuick 2.6
+import Toou2D 1.0
 
+
+/*! TODO */
 Item {
-    id: root
+    id: toou2d_fps
     width: contentItemLoader.width + 5;
     height: contentItemLoader.height + 5;
 
     readonly property alias fps: _private.fps;
     readonly property alias fpsAvg: _private.fpsAvg;
 
-    property color color: "#c0c0c0"
+    property color color: "#C0C0C0"
     property Component contentItem: contentComponent;
 
     Component{
@@ -20,7 +23,7 @@ Item {
         }
     }
 
-    QtObject{
+    TObject{
         id:_private;
         property int frameCounter: 0
         property int frameCounterAvg: 0
@@ -66,7 +69,5 @@ Item {
             }
         }
     }
-
-
 }
 

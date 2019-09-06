@@ -1,6 +1,13 @@
 #include "qml_plugin.h"
 #include "t2d.h"
 
+/*!
+  \class Toou2DQmlPlugin
+
+  \brief
+
+  \sa Toou2DQmlPlugin
+  */
 void Toou2DQmlPlugin::registerTypes(const char *uri)
 {
     // @uri Toou2D

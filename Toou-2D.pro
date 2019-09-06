@@ -7,7 +7,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     src-toou2d/Toou2D.pro \
-    example/example.pro
+    example
 
     example.depends = src-toou2d/Toou2D.pro
-

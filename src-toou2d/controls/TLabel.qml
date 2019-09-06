@@ -1,17 +1,36 @@
 import QtQuick 2.6
+import QtQml 2.2
 import Toou2D 1.0
 
+/*! TODO */
 Text {
-    property alias theme: theme;
+    id: toou2d_label
 
-    text: theme.text;
-    color: theme.color;
+    property alias theme: mtheme;
+
+    color: "#303133"
 
     TThemeBinder{
-        id:theme
-        type:"Label"
+        id:mtheme
+        className: "TLabel"
+        state: toou2d_label.state;
 
-        property string text: bindingString("text","");
-        property color color: bindingColor("color","#000");
+        property alias color: toou2d_label.color;
+        property alias text:  toou2d_label.text;
+
+        property alias bold:     toou2d_wrapper_font.bold;
+        property alias family:   toou2d_wrapper_font.family;
+        property alias pixelSize:toou2d_wrapper_font.pixelSize;
+
+        Component.onCompleted: initialize();
     }
+
+    TObject{
+        id:toou2d_wrapper_font;
+
+        property alias bold:      toou2d_label.font.bold;
+        property alias family:    toou2d_label.font.family;
+        property alias pixelSize: toou2d_label.font.pixelSize;
+    }
+
 }

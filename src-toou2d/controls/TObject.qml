@@ -1,9 +1,8 @@
 import QtQuick 2.6
 
+/*! TODO */
 QtObject {
-    id:tobject;
+    id:toou2d_object;
 
-    default property alias children: tobject._children_private
-
-    property list<QtObject> _children_private;
+    default property list<QtObject> children;
 }

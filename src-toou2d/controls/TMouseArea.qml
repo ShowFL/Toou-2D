@@ -1,50 +1,75 @@
 import QtQuick 2.6
+import Toou2D 1.0
 
+// T2D 基础控件*/
+/*! TODO */
 MouseArea{
+    id:toou2d_mousearea;
 
-    property bool checkable: false;
-    property bool checked: false;
+    cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor;
 
-    QtObject{
-        id:_private;
-        property string sNormal: "normal"
-        property string sHovering: "hovering"
-        property string sPressed: "pressed"
-    }
+    property bool stateEnabled:true;
+
+    property bool checkable:   false;
+
+    property bool checked:     false;
+
+    property bool takeFocus:   true;
+
+    property int stateenum:    0;
 
     state: {
         if(checkable && checked){
-            state = _private.sHovering;
+            setState(TStateType.Hovering);
         }
 
-        return _private.sNormal;
+        return setState(TStateType.Normal);
     }
 
     onEntered: {
         if(hoverEnabled){
-            state = containsPress ? _private.sPressed : _private.sHovering;
+            setState(containsPress ? TStateType.Pressed : TStateType.Hovering);
         }
     }
 
     onExited: {
         if(checkable && checked){
-            state = _private.sHovering;
+            setState(TStateType.Checked);
         }else{
-            state = _private.sNormal;
+            setState(TStateType.Normal);
         }
     }
 
     onPressed: {
-        state = _private.sPressed;
+        setState(TStateType.Pressed);
+        if(takeFocus) focus = true;
     }
 
     onReleased: {
         if(checkable){
             checked = !checked;
-            state = checked ? _private.sHovering : _private.sNormal;
+            setState(checked ? TStateType.Checked : TStateType.Normal);
         }else{
-            state = hoverEnabled && containsMouse ? _private.sHovering : _private.sNormal;
+            setState(hoverEnabled && containsMouse ? TStateType.Hovering : TStateType.Normal);
         }
+    }
+
+
+
+    function setState(val){
+        if(!stateEnabled )return;
+        stateenum = val;
+        state = statetoString(val);
+    }
+
+    function statetoString(value){
+        switch(value){
+        case TStateType.Normal :  return "normal";
+        case TStateType.Hovering: return "hovering";
+        case TStateType.Checked : return "checked";
+        case TStateType.Pressed : return "pressed";
+        }
+        return "none";
     }
 
 }

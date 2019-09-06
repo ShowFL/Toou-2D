@@ -15,33 +15,42 @@ public:
 
     static QObject *exampleQmlSingletonType(QQmlEngine *engine, QJSEngine *scriptEngine);
 
-    Q_PROPERTY(QString globalTheme READ globalTheme WRITE setGlobalTheme NOTIFY globalThemeChanged)
-
     // qml ListView model
     Q_PROPERTY(QVariantList themeList READ themeList /*WRITE setThemelist*/ NOTIFY themeListChanged)
 
-    void setThemeImportPath(const QString& path);
+    Q_PROPERTY(QString appTheme READ appTheme WRITE setAppTheme NOTIFY appThemeChanged)
 
-    void addTheme(const QString& name,const QString& qrc_path);
+    Q_PROPERTY(bool appThemeInvalid READ appThemeInvalid NOTIFY appThemeInvalidChanged)
 
-    void getPropertyData(const QString &type, const QString& property, const QString& state, const QString& className, QVariant& value);
+    void addAppThemePath(const QString& path);
 
-    QString globalTheme() const;
+    void addAppTheme(const QString& name,const QString& qrc_path);
+
+    void appStartupTheme(const QString& name);
+
+    void getPropertyData(const QString &className, const QString& groupName, const QString &tpName, const QString& state, const QString& property, QVariant& result);
+
+    QString appTheme() const;
 
     QVariantList themeList() const;
 
-signals:
-    void globalThemeChanged();
-    void themeListChanged();
+    bool appThemeInvalid() const;
 
-public slots:
-    void setGlobalTheme(const QString &theme);
+signals:
+    void appThemeChanged();
+    void themeListChanged();
+    void appThemeInvalidChanged();
+
+private slots:
+    void setAppTheme(const QString &themeName);
 
 private:
     static ThemeManager*        m_instance;
     QMap<QString,ThemeHandler*> m_themes;
-    QString                     m_theme;
+    QString                     m_startupThemeName;
+    QString                     m_themeName;
     QVariantList                m_themelist;
+    bool m_appThemeInvalid;
 };
 
 #endif // THEMEMANAGER_H

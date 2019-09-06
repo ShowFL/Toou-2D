@@ -3,7 +3,7 @@
 
 #include <QQmlEngine>
 
-class ToouK2D
+class Toou2D
 {
 public:
     static void create(QQmlEngine* engine);

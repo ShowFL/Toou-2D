@@ -9,122 +9,267 @@ import QtQuick.tooling 1.2
 Module {
     dependencies: ["QtQuick 2.8"]
     Component {
-        name: "QQuickColumnLayout"
-        defaultProperty: "data"
-        prototype: "QQuickLinearLayout"
-        exports: ["QtQuick.Layouts/ColumnLayout 1.0"]
-        exportMetaObjectRevisions: [0]
-    }
-    Component {
-        name: "QQuickGridLayout"
-        defaultProperty: "data"
-        prototype: "QQuickGridLayoutBase"
-        exports: ["QtQuick.Layouts/GridLayout 1.0"]
-        exportMetaObjectRevisions: [0]
-        Enum {
-            name: "Flow"
-            values: {
-                "LeftToRight": 0,
-                "TopToBottom": 1
-            }
-        }
-        Property { name: "columnSpacing"; type: "double" }
-        Property { name: "rowSpacing"; type: "double" }
-        Property { name: "columns"; type: "int" }
-        Property { name: "rows"; type: "int" }
-        Property { name: "flow"; type: "Flow" }
-    }
-    Component {
-        name: "QQuickGridLayoutBase"
-        defaultProperty: "data"
-        prototype: "QQuickLayout"
-        Property { name: "layoutDirection"; revision: 1; type: "Qt::LayoutDirection" }
-        Signal { name: "layoutDirectionChanged"; revision: 1 }
-    }
-    Component {
-        name: "QQuickLayout"
-        defaultProperty: "data"
-        prototype: "QQuickItem"
-        exports: ["QtQuick.Layouts/Layout 1.0", "QtQuick.Layouts/Layout 1.2"]
-        isCreatable: false
-        exportMetaObjectRevisions: [0, 0]
-        attachedType: "QQuickLayoutAttached"
-    }
-    Component {
-        name: "QQuickLayoutAttached"
-        prototype: "QObject"
-        Property { name: "minimumWidth"; type: "double" }
-        Property { name: "minimumHeight"; type: "double" }
-        Property { name: "preferredWidth"; type: "double" }
-        Property { name: "preferredHeight"; type: "double" }
-        Property { name: "maximumWidth"; type: "double" }
-        Property { name: "maximumHeight"; type: "double" }
-        Property { name: "fillHeight"; type: "bool" }
-        Property { name: "fillWidth"; type: "bool" }
-        Property { name: "row"; type: "int" }
-        Property { name: "column"; type: "int" }
-        Property { name: "rowSpan"; type: "int" }
-        Property { name: "columnSpan"; type: "int" }
-        Property { name: "alignment"; type: "Qt::Alignment" }
-        Property { name: "margins"; type: "double" }
-        Property { name: "leftMargin"; type: "double" }
-        Property { name: "topMargin"; type: "double" }
-        Property { name: "rightMargin"; type: "double" }
-        Property { name: "bottomMargin"; type: "double" }
-    }
-    Component {
-        name: "QQuickLinearLayout"
-        defaultProperty: "data"
-        prototype: "QQuickGridLayoutBase"
-        Property { name: "spacing"; type: "double" }
-    }
-    Component {
-        name: "QQuickRowLayout"
-        defaultProperty: "data"
-        prototype: "QQuickLinearLayout"
-        exports: ["QtQuick.Layouts/RowLayout 1.0"]
-        exportMetaObjectRevisions: [0]
-    }
-    Component {
-        name: "QQuickStackLayout"
-        defaultProperty: "data"
-        prototype: "QQuickLayout"
-        exports: ["QtQuick.Layouts/StackLayout 1.3"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "count"; type: "int"; isReadonly: true }
-        Property { name: "currentIndex"; type: "int" }
-        Method {
-            name: "itemAt"
-            type: "QQuickItem*"
-            Parameter { name: "index"; type: "int" }
-        }
-    }
-    Component {
         name: "T2D"
         prototype: "QObject"
         exports: ["Toou2D/T2D 1.0"]
         isCreatable: false
         isSingleton: true
         exportMetaObjectRevisions: [0]
+        Method { name: "version"; type: "string" }
+        Method {
+            name: "awesomeFromKey"
+            type: "string"
+            Parameter { name: "key"; type: "string" }
+        }
+        Method {
+            name: "awesomeFromValue"
+            type: "string"
+            Parameter { name: "type"; type: "int" }
+        }
+        Method { name: "awesomelist"; type: "QStringList" }
+    }
+    Component {
+        name: "T2DWorld"
+        defaultProperty: "data"
+        prototype: "QQuickItem"
+        exports: ["Toou2D/T2DWorld 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "appStartupTheme"; type: "string" }
+        Property { name: "appThemePaths"; type: "QStringList" }
+    }
+    Component {
+        name: "TDialogItem"
+        defaultProperty: "data"
+        prototype: "QQuickItem"
+        exports: ["Toou2D/TDialogItem 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "parameter"; type: "QVariant" }
+        Signal {
+            name: "parameterChanged"
+            Parameter { name: "parameter"; type: "QVariant" }
+        }
+        Method {
+            name: "setParameter"
+            Parameter { name: "parameter"; type: "QVariant" }
+        }
+    }
+    Component {
+        name: "TGadgetBackground"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetBackground 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "width"; type: "int" }
+        Property { name: "height"; type: "int" }
+        Property { name: "scale"; type: "float" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "radius"; type: "int" }
+        Property { name: "opacity"; type: "float" }
+        Property { name: "visible"; type: "bool" }
+    }
+    Component {
+        name: "TGadgetBorder"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetBorder 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "width"; type: "int" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "leftWidth"; type: "int" }
+        Property { name: "rightWidth"; type: "int" }
+        Property { name: "topWidth"; type: "int" }
+        Property { name: "bottomWidth"; type: "int" }
+        Property { name: "isValid"; type: "bool"; isReadonly: true }
+    }
+    Component {
+        name: "TGadgetIcon"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetIcon 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "type"; type: "int" }
+        Property { name: "source"; type: "string" }
+        Property { name: "width"; type: "int" }
+        Property { name: "height"; type: "int" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "scale"; type: "float" }
+        Property { name: "position"; type: "int" }
+        Signal {
+            name: "typeChanged"
+            Parameter { name: "type"; type: "int" }
+        }
+        Signal {
+            name: "positionChanged"
+            Parameter { name: "position"; type: "int" }
+        }
+    }
+    Component {
+        name: "TGadgetItem"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetItem 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "width"; type: "int" }
+        Property { name: "height"; type: "int" }
+        Signal {
+            name: "widthChanged"
+            Parameter { name: "width"; type: "int" }
+        }
+        Signal {
+            name: "heightChanged"
+            Parameter { name: "height"; type: "int" }
+        }
+    }
+    Component {
+        name: "TGadgetLabel"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetLabel 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "text"; type: "string" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "scale"; type: "float" }
+        Property { name: "font"; type: "QFont" }
+        Property { name: "font_size"; type: "int" }
+        Signal {
+            name: "font_sizeChanged"
+            Parameter { name: "font_size"; type: "int" }
+        }
+        Method {
+            name: "setFont_size"
+            Parameter { name: "font_size"; type: "int" }
+        }
+    }
+    Component {
+        name: "TGadgetScrollbar"
+        prototype: "QObject"
+        exports: ["Toou2D/TGadgetScrollbar 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "horizontal"; type: "bool" }
+        Property { name: "vertical"; type: "bool" }
+        Property { name: "autoHide"; type: "bool" }
+    }
+    Component {
+        name: "TToastItem"
+        defaultProperty: "data"
+        prototype: "QQuickItem"
+        exports: ["Toou2D/TToastItem 1.0"]
+        exportMetaObjectRevisions: [0]
         Enum {
-            name: "TButtonType"
+            name: "Type"
             values: {
-                "Btn_Ok": 0,
-                "Btn_Cancel": 1,
-                "Btn_Save": 2
+                "Message": 0,
+                "Error": 1,
+                "Warning": 2,
+                "Custom": 3
             }
         }
-        Enum {
-            name: "IconPosition"
-            values: {
-                "IconLeft": 1,
-                "IconReght": 2,
-                "IconTop": 3,
-                "IconOnly": 4
-            }
+        Property { name: "message"; type: "string" }
+        Property { name: "type"; type: "int" }
+        Signal {
+            name: "messageChanged"
+            Parameter { name: "message"; type: "string" }
         }
+        Signal {
+            name: "typeChanged"
+            Parameter { name: "type"; type: "int" }
+        }
+        Method {
+            name: "setMessage"
+            Parameter { name: "message"; type: "string" }
+        }
+        Method {
+            name: "setType"
+            Parameter { name: "type"; type: "int" }
+        }
+    }
+    Component {
+        name: "ThemeBinder"
+        defaultProperty: "childs"
+        prototype: "QObject"
+        exports: ["Toou2D/TThemeBinder 1.0"]
+        exportMetaObjectRevisions: [0]
+        Property { name: "target"; type: "QObject"; isPointer: true }
+        Property { name: "childName"; type: "string" }
+        Property { name: "groupName"; type: "string" }
+        Property { name: "className"; type: "string" }
+        Property { name: "font"; type: "QFont" }
+        Property { name: "enabled"; type: "bool" }
+        Property { name: "state"; type: "string" }
+        Property { name: "stateAsynchronous"; type: "bool" }
+        Property { name: "sendDefaultValue"; type: "bool" }
+        Property { name: "filterPropertyName"; type: "QStringList" }
+        Property { name: "parent"; type: "ThemeBinder"; isPointer: true }
+        Property { name: "childs"; type: "ThemeBinder"; isList: true; isReadonly: true }
+        Signal {
+            name: "childNameChanged"
+            Parameter { name: "childName"; type: "string" }
+        }
+        Signal {
+            name: "sendDefaultValueChanged"
+            Parameter { name: "sendDefaultValue"; type: "bool" }
+        }
+        Signal {
+            name: "parentChanged"
+            Parameter { name: "parent"; type: "ThemeBinder"; isPointer: true }
+        }
+        Signal {
+            name: "filterPropertyNameChanged"
+            Parameter { name: "filterPropertyName"; type: "QStringList" }
+        }
+        Signal {
+            name: "stateAsynchronousChanged"
+            Parameter { name: "stateAsynchronous"; type: "bool" }
+        }
+        Method {
+            name: "setStateAsynchronous"
+            Parameter { name: "stateAsynchronous"; type: "bool" }
+        }
+        Method { name: "initialize" }
+        Method {
+            name: "bindingInt"
+            type: "int"
+            Parameter { name: "property"; type: "string" }
+            Parameter { name: "defaultValue"; type: "int" }
+        }
+        Method {
+            name: "bindingBool"
+            type: "bool"
+            Parameter { name: "property"; type: "string" }
+            Parameter { name: "defaultValue"; type: "bool" }
+        }
+        Method {
+            name: "bindingString"
+            type: "string"
+            Parameter { name: "property"; type: "string" }
+            Parameter { name: "defaultValue"; type: "string" }
+        }
+        Method {
+            name: "bindingColor"
+            type: "QColor"
+            Parameter { name: "property"; type: "string" }
+            Parameter { name: "defaultValue"; type: "QColor" }
+        }
+        Method {
+            name: "bindingDouble"
+            type: "double"
+            Parameter { name: "property"; type: "string" }
+            Parameter { name: "defaultValue"; type: "double" }
+        }
+    }
+    Component {
+        name: "ThemeManager"
+        prototype: "QObject"
+        exports: ["Toou2D/TThemeManager 1.0"]
+        isCreatable: false
+        isSingleton: true
+        exportMetaObjectRevisions: [0]
+        Property { name: "themeList"; type: "QVariantList"; isReadonly: true }
+        Property { name: "appTheme"; type: "string" }
+        Property { name: "appThemeInvalid"; type: "bool"; isReadonly: true }
+    }
+    Component {
+        name: "Toou2D_Awesome"
+        exports: ["Toou2D/TAwesomeType 1.0"]
+        isCreatable: false
+        exportMetaObjectRevisions: [0]
         Enum {
-            name: "AwesomeType"
+            name: "Toou2D_AwesomeType"
             values: {
                 "FA_glass": 61440,
                 "FA_music": 61441,
@@ -913,132 +1058,108 @@ Module {
                 "FA_meetup": 62176
             }
         }
-        Method { name: "version"; type: "string" }
-        Method {
-            name: "awesomeFromKey"
-            type: "string"
-            Parameter { name: "key"; type: "string" }
-        }
-        Method {
-            name: "awesomeFromValue"
-            type: "string"
-            Parameter { name: "type"; type: "int" }
-        }
-        Method { name: "awesomelist"; type: "QStringList" }
     }
     Component {
-        name: "T2DWorld"
-        defaultProperty: "data"
-        prototype: "QQuickItem"
-        exports: ["Toou2D/T2DWorld 1.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "globalTheme"; type: "string" }
-        Property { name: "importThemePath"; type: "string" }
-    }
-    Component {
-        name: "TDialogItem"
-        defaultProperty: "data"
-        prototype: "QQuickItem"
-        exports: ["Toou2D/TDialogItem 1.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "parameter"; type: "QVariant" }
-        Signal {
-            name: "parameterChanged"
-            Parameter { name: "parameter"; type: "QVariant" }
-        }
-        Method {
-            name: "setParameter"
-            Parameter { name: "parameter"; type: "QVariant" }
-        }
-    }
-    Component {
-        name: "TToastItem"
-        defaultProperty: "data"
-        prototype: "QQuickItem"
-        exports: ["Toou2D/TToastItem 1.0"]
+        name: "Toou2D_Icon"
+        exports: ["Toou2D/TIconType 1.0"]
+        isCreatable: false
         exportMetaObjectRevisions: [0]
         Enum {
-            name: "Type"
+            name: "Toou2D_IconType"
             values: {
-                "Message": 0,
-                "Error": 1,
-                "Warning": 2,
-                "Custom": 3
+                "Awesome": 0,
+                "SVG": 1
             }
         }
-        Property { name: "message"; type: "string" }
-        Property { name: "type"; type: "int" }
-        Signal {
-            name: "messageChanged"
-            Parameter { name: "message"; type: "string" }
-        }
-        Signal {
-            name: "typeChanged"
-            Parameter { name: "type"; type: "int" }
-        }
-        Method {
-            name: "setMessage"
-            Parameter { name: "message"; type: "string" }
-        }
-        Method {
-            name: "setType"
-            Parameter { name: "type"; type: "int" }
-        }
     }
     Component {
-        name: "ThemeBinder"
-        prototype: "QObject"
-        exports: ["Toou2D/TThemeBinder 1.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "type"; type: "string" }
-        Property { name: "className"; type: "string" }
-        Property { name: "font"; type: "QFont" }
-        Property { name: "enabled"; type: "bool" }
-        Property { name: "state"; type: "string" }
-        Method {
-            name: "bindingInt"
-            type: "int"
-            Parameter { name: "property"; type: "string" }
-            Parameter { name: "defaultValue"; type: "int" }
-        }
-        Method {
-            name: "bindingBool"
-            type: "bool"
-            Parameter { name: "property"; type: "string" }
-            Parameter { name: "defaultValue"; type: "bool" }
-        }
-        Method {
-            name: "bindingString"
-            type: "string"
-            Parameter { name: "property"; type: "string" }
-            Parameter { name: "defaultValue"; type: "string" }
-        }
-        Method {
-            name: "bindingColor"
-            type: "QColor"
-            Parameter { name: "property"; type: "string" }
-            Parameter { name: "defaultValue"; type: "QColor" }
-        }
-        Method {
-            name: "bindingDouble"
-            type: "double"
-            Parameter { name: "property"; type: "string" }
-            Parameter { name: "defaultValue"; type: "double" }
-        }
-    }
-    Component {
-        name: "ThemeManager"
-        prototype: "QObject"
-        exports: ["Toou2D/TThemeManager 1.0"]
+        name: "Toou2D_PixelSize"
+        exports: ["Toou2D/TPixelSizePreset 1.0"]
         isCreatable: false
-        isSingleton: true
         exportMetaObjectRevisions: [0]
-        Property { name: "globalTheme"; type: "string" }
-        Property { name: "themeList"; type: "QVariantList"; isReadonly: true }
-        Method {
-            name: "setGlobalTheme"
-            Parameter { name: "theme"; type: "string" }
+        Enum {
+            name: "Toou2D_PixelSizePreset"
+            values: {
+                "PH1": 32,
+                "PH2": 24,
+                "PH3": 19,
+                "PH4": 16,
+                "PH5": 14,
+                "PH6": 12,
+                "PH7": 10,
+                "PH8": 8
+            }
         }
+    }
+    Component {
+        name: "Toou2D_Position"
+        exports: ["Toou2D/TPosition 1.0"]
+        isCreatable: false
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "Toou2D_PositionType"
+            values: {
+                "Left": 0,
+                "Reght": 1,
+                "Top": 2,
+                "Bottom": 3,
+                "Center": 4,
+                "Only": 5
+            }
+        }
+    }
+    Component {
+        name: "Toou2D_State"
+        exports: ["Toou2D/TStateType 1.0"]
+        isCreatable: false
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "Toou2D_StateType"
+            values: {
+                "Normal": 0,
+                "Hovering": 1,
+                "Pressed": 2,
+                "Checked": 3
+            }
+        }
+    }
+    Component {
+        name: "Toou2D_Time"
+        exports: ["Toou2D/TTimePreset 1.0"]
+        isCreatable: false
+        exportMetaObjectRevisions: [0]
+        Enum {
+            name: "Toou2D_TimePreset"
+            values: {
+                "DevilTime3600s": 500,
+                "T1s": 1000,
+                "T2s": 2000,
+                "T3s": 3000,
+                "T4s": 4000,
+                "T5s": 5000,
+                "T6s": 6000,
+                "T7s": 21000,
+                "T8s": 40000,
+                "T9s": 45000,
+                "ShortTime2s": 2000,
+                "LongTime4s": 4000
+            }
+        }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TAvatar 1.0"
+        exports: ["Toou2D/TAvatar 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "radius"; type: "int" }
+        Property { name: "asynchronous"; type: "bool" }
+        Property { name: "smooth"; type: "bool" }
+        Property { name: "border"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "source"; type: "QUrl" }
+        Property { name: "fillMode"; type: "int" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
     }
     Component {
         prototype: "QQuickItem"
@@ -1047,9 +1168,9 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "data"
-        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
         Property { name: "color"; type: "QColor" }
         Property { name: "source"; type: "string" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
     }
     Component {
         prototype: "QQuickRectangle"
@@ -1058,10 +1179,30 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "data"
-        Property { name: "margin"; type: "int" }
-        Property { name: "value"; type: "string" }
-        Property { name: "font"; type: "QFont" }
+        Property { name: "padding"; type: "int" }
+        Property { name: "value"; type: "int" }
+        Property { name: "max"; type: "int" }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TBusyIndicator 1.0"
+        exports: ["Toou2D/TBusyIndicator 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "contentWidth"; type: "int"; isReadonly: true }
+        Property { name: "contentHeight"; type: "int"; isReadonly: true }
+        Property { name: "padding"; type: "int" }
+        Property { name: "duration"; type: "int" }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "defaultIconAnimator"; type: "QQmlComponent"; isReadonly: true; isPointer: true }
+        Property { name: "defaultDotAnimator"; type: "QQmlComponent"; isReadonly: true; isPointer: true }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "running"; type: "bool" }
     }
     Component {
         prototype: "QQuickMouseArea"
@@ -1070,15 +1211,98 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "data"
-        Property { name: "margin"; type: "int" }
-        Property { name: "text"; type: "string" }
-        Property { name: "color"; type: "QColor" }
-        Property { name: "backgroundItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentItem"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "padding"; type: "int" }
+        Property { name: "contentHAlign"; type: "int" }
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "defaultState"; type: "QQuickState"; isList: true; isReadonly: true }
+        Property { name: "contentWidth"; type: "double"; isReadonly: true }
+        Property { name: "contentHeight"; type: "double"; isReadonly: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
-        Property { name: "font"; type: "QFont" }
+        Property { name: "stateEnabled"; type: "bool" }
         Property { name: "checkable"; type: "bool" }
         Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TCarousel 1.0"
+        exports: ["Toou2D/TCarousel 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "childs"
+        Property { name: "itemWidth"; type: "int" }
+        Property { name: "itemHeight"; type: "int" }
+        Property { name: "margen"; type: "int" }
+        Property { name: "interval"; type: "int" }
+        Property { name: "pathItemCount"; type: "int" }
+        Property {
+            name: "chillilst"
+            type: "TCarouselElement_QMLTYPE_31"
+            isList: true
+            isReadonly: true
+        }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "count"; type: "int"; isReadonly: true }
+        Property { name: "currentIndex"; type: "int" }
+        Property { name: "currentItem"; type: "QQuickItem"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "childs"; type: "TCarouselElement_QMLTYPE_31"; isList: true; isReadonly: true }
+        Signal {
+            name: "triggered"
+            Parameter { name: "modelData"; type: "QVariant" }
+        }
+        Method {
+            name: "addElement"
+            type: "QVariant"
+            Parameter { name: "element"; type: "QVariant" }
+        }
+        Method { name: "decrementCurrentIndex"; type: "QVariant" }
+        Method { name: "incrementCurrentIndex"; type: "QVariant" }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TCarouselElement 1.0"
+        exports: ["Toou2D/TCarouselElement 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "children"
+        Property { name: "imageSource"; type: "string" }
+        Property { name: "otherData"; type: "QVariant" }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TCheckBox 1.0"
+        exports: ["Toou2D/TCheckBox 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "padding"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "iconPosition"; type: "int" }
+        Property { name: "iconComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "checked"; type: "bool" }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "iconChecked"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "QQuickPen"; isReadonly: true; isPointer: true }
     }
     Component {
         prototype: "QObject"
@@ -1086,32 +1310,77 @@ Module {
         exports: ["Toou2D/TDialog 1.0"]
         exportMetaObjectRevisions: [0]
         isComposite: true
-        Property { name: "buttons"; type: "string" }
-        Property { name: "_private"; type: "QObject"; isPointer: true }
-        Property { name: "backgroundItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "titleItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "bottomItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "customContentItem"; type: "QQmlComponent"; isPointer: true }
+        defaultProperty: "contentComponent"
+        Property { name: "titleText"; type: "string" }
+        Property { name: "contentText"; type: "string" }
+        Property { name: "closeable"; type: "bool" }
+        Property { name: "contentCenter"; type: "bool" }
+        Property { name: "buttonSpacing"; type: "int" }
+        Property { name: "headerComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "footerComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "buttons"; type: "TDialogButton_QMLTYPE_49"; isList: true; isReadonly: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Signal {
+            name: "triggered"
+            Parameter { name: "button"; type: "QVariant" }
+            Parameter { name: "item"; type: "QVariant" }
+        }
+        Property { name: "modalclose"; type: "bool" }
+        Property { name: "bodyComponent"; type: "QQmlComponent"; isPointer: true }
         Signal { name: "opened" }
         Signal { name: "closed" }
-        Signal {
-            name: "buttonClicked"
-            Parameter { name: "button"; type: "QVariant" }
-            Parameter { name: "parameter"; type: "QVariant" }
-        }
-        Method { name: "isopening"; type: "QVariant" }
-        Method {
-            name: "open"
-            type: "QVariant"
-            Parameter { name: "parameter"; type: "QVariant" }
-        }
-        Method {
-            name: "openCustom"
-            type: "QVariant"
-            Parameter { name: "parameter"; type: "QVariant" }
-        }
+        Method { name: "open"; type: "QVariant" }
+        Method { name: "hideAndClose"; type: "QVariant" }
         Method { name: "close"; type: "QVariant" }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TDialogBasic 1.0"
+        exports: ["Toou2D/TDialogBasic 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "children"
+        Property { name: "modalclose"; type: "bool" }
+        Property { name: "bodyComponent"; type: "QQmlComponent"; isPointer: true }
+        Signal { name: "opened" }
+        Signal { name: "closed" }
+        Method { name: "open"; type: "QVariant" }
+        Method { name: "hideAndClose"; type: "QVariant" }
+        Method { name: "close"; type: "QVariant" }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TDialogButton 1.0"
+        exports: ["Toou2D/TDialogButton 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "children"
+        Property { name: "lighter"; type: "bool" }
+        Property { name: "otherData"; type: "QVariant" }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QQuickRectangle"
+        name: "Toou2D/TDividerLine 1.0"
+        exports: ["Toou2D/TDividerLine 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+    }
+    Component {
+        prototype: "QQuickFlickable"
+        name: "Toou2D/TFlickable 1.0"
+        exports: ["Toou2D/TFlickable 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "flickableData"
+        Property { name: "scrollBar"; type: "TGadgetScrollbar"; isReadonly: true; isPointer: true }
     }
     Component {
         prototype: "QQuickItem"
@@ -1126,30 +1395,52 @@ Module {
         Property { name: "fpsAvg"; type: "int"; isReadonly: true }
     }
     Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TIcon 1.0"
+        exports: ["Toou2D/TIcon 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "source"; type: "string" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+    }
+    Component {
         prototype: "QQuickMouseArea"
         name: "Toou2D/TIconButton 1.0"
         exports: ["Toou2D/TIconButton 1.0"]
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "data"
-        Property { name: "iconLayout"; type: "int" }
         Property { name: "spacing"; type: "int" }
-        Property { name: "iconSize"; type: "int" }
-        Property { name: "iconSource"; type: "string" }
-        Property { name: "iconColor"; type: "QColor" }
-        Property { name: "contentIconOnlyItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentRowLayoutItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentColumnLayoutItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "iconTheme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
-        Property { name: "margin"; type: "int" }
-        Property { name: "text"; type: "string" }
-        Property { name: "color"; type: "QColor" }
-        Property { name: "backgroundItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentItem"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "iconComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "padding"; type: "int" }
+        Property { name: "contentHAlign"; type: "int" }
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "defaultState"; type: "QQuickState"; isList: true; isReadonly: true }
+        Property { name: "contentWidth"; type: "double"; isReadonly: true }
+        Property { name: "contentHeight"; type: "double"; isReadonly: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
-        Property { name: "font"; type: "QFont" }
+        Property { name: "stateEnabled"; type: "bool" }
         Property { name: "checkable"; type: "bool" }
         Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
     }
     Component {
         prototype: "QQuickImage"
@@ -1168,10 +1459,66 @@ Module {
         isComposite: true
         defaultProperty: "data"
         Property { name: "source"; type: "string" }
-        Property { name: "contentItem"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "pressSource"; type: "string" }
+        Property { name: "pressScale"; type: "double" }
+        Property { name: "defstates"; type: "QQuickState"; isList: true; isReadonly: true }
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "stateEnabled"; type: "bool" }
         Property { name: "checkable"; type: "bool" }
         Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TInputField 1.0"
+        exports: ["Toou2D/TInputField 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "verticalMargin"; type: "int" }
+        Property { name: "horizontalMargin"; type: "int" }
+        Property { name: "placeholderPosition"; type: "int" }
+        Property { name: "placeholderSpacing"; type: "int" }
+        Property { name: "clearable"; type: "bool" }
+        Property { name: "cursorDelegate"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "cursorColor"; type: "QColor" }
+        Property { name: "inputing"; type: "bool" }
+        Property { name: "placeholderLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "placeholderIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "clearIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "acceptableInput"; type: "bool"; isReadonly: true }
+        Property { name: "activeFocusOnPress"; type: "bool" }
+        Property { name: "canPaste"; type: "bool"; isReadonly: true }
+        Property { name: "canRedo"; type: "bool"; isReadonly: true }
+        Property { name: "canUndo"; type: "bool"; isReadonly: true }
+        Property { name: "echoMode"; type: "int" }
+        Property { name: "inputMask"; type: "string" }
+        Property { name: "inputMethodComposing"; type: "bool"; isReadonly: true }
+        Property { name: "inputMethodHints"; type: "int" }
+        Property { name: "length"; type: "int"; isReadonly: true }
+        Property { name: "maximumLength"; type: "int" }
+        Property { name: "selectByMouse"; type: "bool" }
+        Property { name: "selectedText"; type: "string"; isReadonly: true }
+        Property { name: "selectionEnd"; type: "int"; isReadonly: true }
+        Property { name: "selectionStart"; type: "int"; isReadonly: true }
+        Property { name: "text"; type: "string" }
+        Property { name: "qtInput"; type: "QQuickTextInput"; isReadonly: true; isPointer: true }
+        Signal { name: "cleared" }
     }
     Component {
         prototype: "QQuickText"
@@ -1189,8 +1536,63 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "data"
+        Property { name: "stateEnabled"; type: "bool" }
         Property { name: "checkable"; type: "bool" }
         Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TNavigationBar 1.0"
+        exports: ["Toou2D/TNavigationBar 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "contentchild"
+        Property { name: "itemWidth"; type: "int" }
+        Property { name: "itemHeight"; type: "int" }
+        Property { name: "padding"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "itemComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "currentIndex"; type: "int" }
+        Property { name: "currentItem"; type: "QQuickItem"; isReadonly: true; isPointer: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "activeLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "activeIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property {
+            name: "contentchild"
+            type: "TNavigationElement_QMLTYPE_80"
+            isList: true
+            isReadonly: true
+        }
+        Signal {
+            name: "triggered"
+            Parameter { name: "modelData"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TNavigationElement 1.0"
+        exports: ["Toou2D/TNavigationElement 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "children"
+        Property { name: "text"; type: "string" }
+        Property { name: "iconSource"; type: "string" }
+        Property { name: "otherData"; type: "QVariant" }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
     }
     Component {
         prototype: "QObject"
@@ -1199,8 +1601,28 @@ Module {
         exportMetaObjectRevisions: [0]
         isComposite: true
         defaultProperty: "children"
-        Property { name: "_children_private"; type: "QObject"; isList: true; isReadonly: true }
         Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TPagination 1.0"
+        exports: ["Toou2D/TPagination 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "currentIndex"; type: "int" }
+        Property { name: "count"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "contentComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "itemBackground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "itemActiveBg"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "itemBorder"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "itemActiveBorder"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Signal {
+            name: "triggered"
+            Parameter { name: "index"; type: "QVariant" }
+        }
     }
     Component {
         prototype: "QObject"
@@ -1208,35 +1630,123 @@ Module {
         exports: ["Toou2D/TPopover 1.0"]
         exportMetaObjectRevisions: [0]
         isComposite: true
-        defaultProperty: "children"
-        Property { name: "backgroundItemv"; type: "QQmlComponent"; isPointer: true }
+        defaultProperty: "childitem"
+        Property { name: "padding"; type: "int" }
+        Property { name: "bodyWidth"; type: "int" }
+        Property { name: "bodyComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "bodyBackground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "bodyBorder"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
-        Property { name: "width"; type: "double" }
-        Property { name: "children"; type: "TPopoverElement_QMLTYPE_37"; isList: true; isReadonly: true }
-        Signal {
-            name: "clicked"
-            Parameter { name: "element"; type: "QVariant" }
-        }
         Method {
             name: "open"
             type: "QVariant"
             Parameter { name: "pos_x"; type: "QVariant" }
             Parameter { name: "pos_y"; type: "QVariant" }
         }
-        Property { name: "backgroundItem"; type: "QQuickItem"; isPointer: true }
-        Property { name: "_popup"; type: "QObject"; isPointer: true }
-        Method { name: "open"; type: "QVariant" }
+        Method {
+            name: "openToGlobal"
+            type: "QVariant"
+            Parameter { name: "item"; type: "QVariant" }
+            Parameter { name: "off_x"; type: "QVariant" }
+            Parameter { name: "off_y"; type: "QVariant" }
+        }
+        Method { name: "resetLayout"; type: "QVariant" }
         Method { name: "close"; type: "QVariant" }
-        Property { name: "_children_private"; type: "QObject"; isList: true; isReadonly: true }
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "privatec"; type: "TObject_QMLTYPE_0"; isReadonly: true; isPointer: true }
+        Property { name: "childitem"; type: "QObject"; isList: true; isReadonly: true }
+        Signal { name: "closeed" }
+        Signal { name: "opened" }
+        Signal {
+            name: "hided"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
+        Signal { name: "triggeredBackground" }
+        Method { name: "open"; type: "QVariant" }
+        Method {
+            name: "hide"
+            type: "QVariant"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
     }
     Component {
-        prototype: "QQmlListElement"
+        prototype: "QObject"
         name: "Toou2D/TPopoverElement 1.0"
         exports: ["Toou2D/TPopoverElement 1.0"]
         exportMetaObjectRevisions: [0]
         isComposite: true
-        Property { name: "label"; type: "string" }
-        Property { name: "icon"; type: "int" }
+        defaultProperty: "children"
+        Property { name: "type"; type: "string" }
+        Property { name: "text"; type: "string" }
+        Property { name: "iconSource"; type: "string" }
+        Property { name: "otherData"; type: "QVariant" }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TPopoverMenu 1.0"
+        exports: ["Toou2D/TPopoverMenu 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "elementlist"
+        Property { name: "groupComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "itemComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "elementlist"; type: "QObject"; isList: true; isReadonly: true }
+        Property { name: "groupBackground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "groupLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "itemLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "itemBackground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "activeItemLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "itemIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "activeItemIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Signal {
+            name: "triggered"
+            Parameter { name: "modelData"; type: "QVariant" }
+        }
+        Method {
+            name: "addElement"
+            type: "QVariant"
+            Parameter { name: "obj"; type: "QVariant" }
+        }
+        Property { name: "padding"; type: "int" }
+        Property { name: "bodyWidth"; type: "int" }
+        Property { name: "bodyComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "bodyBackground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "bodyBorder"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Method {
+            name: "open"
+            type: "QVariant"
+            Parameter { name: "pos_x"; type: "QVariant" }
+            Parameter { name: "pos_y"; type: "QVariant" }
+        }
+        Method {
+            name: "openToGlobal"
+            type: "QVariant"
+            Parameter { name: "item"; type: "QVariant" }
+            Parameter { name: "off_x"; type: "QVariant" }
+            Parameter { name: "off_y"; type: "QVariant" }
+        }
+        Method { name: "resetLayout"; type: "QVariant" }
+        Method { name: "close"; type: "QVariant" }
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "privatec"; type: "TObject_QMLTYPE_0"; isReadonly: true; isPointer: true }
+        Property { name: "childitem"; type: "QObject"; isList: true; isReadonly: true }
+        Signal { name: "closeed" }
+        Signal { name: "opened" }
+        Signal {
+            name: "hided"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
+        Signal { name: "triggeredBackground" }
+        Method { name: "open"; type: "QVariant" }
+        Method {
+            name: "hide"
+            type: "QVariant"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
     }
     Component {
         prototype: "QObject"
@@ -1244,13 +1754,83 @@ Module {
         exports: ["Toou2D/TPopup 1.0"]
         exportMetaObjectRevisions: [0]
         isComposite: true
-        defaultProperty: "children"
-        Property { name: "backgroundItem"; type: "QQuickItem"; isPointer: true }
-        Property { name: "_popup"; type: "QObject"; isPointer: true }
+        defaultProperty: "childitem"
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "privatec"; type: "TObject_QMLTYPE_0"; isReadonly: true; isPointer: true }
+        Property { name: "childitem"; type: "QObject"; isList: true; isReadonly: true }
+        Signal { name: "closeed" }
+        Signal { name: "opened" }
+        Signal {
+            name: "hided"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
+        Signal { name: "triggeredBackground" }
         Method { name: "open"; type: "QVariant" }
+        Method {
+            name: "hide"
+            type: "QVariant"
+            Parameter { name: "autoclose"; type: "QVariant" }
+        }
         Method { name: "close"; type: "QVariant" }
-        Property { name: "_children_private"; type: "QObject"; isList: true; isReadonly: true }
         Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TProgressBar 1.0"
+        exports: ["Toou2D/TProgressBar 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "padding"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "labelPosition"; type: "int" }
+        Property { name: "value"; type: "double" }
+        Property { name: "maxValue"; type: "double" }
+        Property { name: "minValue"; type: "double" }
+        Property { name: "bakcgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "foregroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "labelComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "percentage"; type: "double"; isReadonly: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "bakcground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "foreground"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "text"; type: "string" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "moveing"; type: "bool"; isReadonly: true }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TRadioBox 1.0"
+        exports: ["Toou2D/TRadioBox 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "checked"; type: "bool" }
+        Property { name: "padding"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "iconPosition"; type: "int" }
+        Property { name: "groupIndex"; type: "int" }
+        Property { name: "iconComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "icon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "iconChecked"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "QQuickPen"; isReadonly: true; isPointer: true }
+    }
+    Component {
+        prototype: "QObject"
+        name: "Toou2D/TRadioBoxGroup 1.0"
+        exports: ["Toou2D/TRadioBoxGroup 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "children"
+        Property { name: "parent"; type: "QQuickItem"; isPointer: true }
+        Property { name: "currentItem"; type: "QQuickItem"; isReadonly: true; isPointer: true }
+        Property { name: "_"; type: "TObject_QMLTYPE_0"; isReadonly: true; isPointer: true }
+        Property { name: "mchilds"; type: "TRadioBox_QMLTYPE_113"; isList: true; isReadonly: true }
+        Property { name: "currentIndex"; type: "int"; isReadonly: true }
+        Property { name: "children"; type: "TRadioBox_QMLTYPE_113"; isList: true; isReadonly: true }
     }
     Component {
         prototype: "QQuickRectangle"
@@ -1262,6 +1842,124 @@ Module {
         Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
     }
     Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TSVGIcon 1.0"
+        exports: ["Toou2D/TSVGIcon 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "asynchronous"; type: "bool" }
+        Property { name: "smooth"; type: "bool" }
+        Property { name: "color"; type: "QColor" }
+        Property { name: "source"; type: "string" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+    }
+    Component {
+        prototype: "QQuickMouseArea"
+        name: "Toou2D/TScrollbarH 1.0"
+        exports: ["Toou2D/TScrollbarH 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "target"; type: "QVariant" }
+        Property { name: "hide"; type: "bool" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "stateEnabled"; type: "bool" }
+        Property { name: "checkable"; type: "bool" }
+        Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QQuickMouseArea"
+        name: "Toou2D/TScrollbarV 1.0"
+        exports: ["Toou2D/TScrollbarV 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "target"; type: "QVariant" }
+        Property { name: "hide"; type: "bool" }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Property { name: "stateEnabled"; type: "bool" }
+        Property { name: "checkable"; type: "bool" }
+        Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
+        prototype: "QQuickItem"
+        name: "Toou2D/TSwitch 1.0"
+        exports: ["Toou2D/TSwitch 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "padding"; type: "int" }
+        Property { name: "checked"; type: "bool" }
+        Property { name: "dotComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "backgroundComponent"; type: "QQmlComponent"; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property {
+            name: "activeBackground"
+            type: "TGadgetBackground"
+            isReadonly: true
+            isPointer: true
+        }
+        Property { name: "dot"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+    }
+    Component {
+        prototype: "QQuickMouseArea"
+        name: "Toou2D/TTag 1.0"
+        exports: ["Toou2D/TTag 1.0"]
+        exportMetaObjectRevisions: [0]
+        isComposite: true
+        defaultProperty: "data"
+        Property { name: "padding"; type: "int" }
+        Property { name: "spacing"; type: "int" }
+        Property { name: "closable"; type: "bool" }
+        Property { name: "clickable"; type: "bool" }
+        Property { name: "label"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
+        Property { name: "border"; type: "TGadgetBorder"; isReadonly: true; isPointer: true }
+        Property { name: "background"; type: "TGadgetBackground"; isReadonly: true; isPointer: true }
+        Property { name: "theme"; type: "ThemeBinder"; isReadonly: true; isPointer: true }
+        Signal { name: "closed" }
+        Property { name: "stateEnabled"; type: "bool" }
+        Property { name: "checkable"; type: "bool" }
+        Property { name: "checked"; type: "bool" }
+        Property { name: "takeFocus"; type: "bool" }
+        Property { name: "stateenum"; type: "int" }
+        Method {
+            name: "setState"
+            type: "QVariant"
+            Parameter { name: "val"; type: "QVariant" }
+        }
+        Method {
+            name: "statetoString"
+            type: "QVariant"
+            Parameter { name: "value"; type: "QVariant" }
+        }
+    }
+    Component {
         prototype: "QObject"
         name: "Toou2D/TToast 1.0"
         exports: ["Toou2D/TToast 1.0"]
@@ -1269,37 +1967,42 @@ Module {
         isComposite: true
         isCreatable: false
         isSingleton: true
-        Property { name: "buttons"; type: "int" }
-        Property { name: "longTime"; type: "int" }
-        Property { name: "shortTime"; type: "int" }
-        Property { name: "_private"; type: "QObject"; isPointer: true }
-        Property { name: "contentMessageItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentErrorItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentWarningItem"; type: "QQmlComponent"; isPointer: true }
-        Property { name: "contentCustomItem"; type: "QQmlComponent"; isPointer: true }
+        defaultProperty: "children"
+        Property { name: "layoutY"; type: "int" }
         Method {
-            name: "showMessage"
+            name: "showSuccess"
             type: "QVariant"
-            Parameter { name: "mes"; type: "QVariant" }
+            Parameter { name: "text"; type: "QVariant" }
             Parameter { name: "duration"; type: "QVariant" }
+            Parameter { name: "moremsg"; type: "QVariant" }
         }
         Method {
-            name: "showError"
+            name: "showInfo"
             type: "QVariant"
-            Parameter { name: "mes"; type: "QVariant" }
+            Parameter { name: "text"; type: "QVariant" }
             Parameter { name: "duration"; type: "QVariant" }
+            Parameter { name: "moremsg"; type: "QVariant" }
         }
         Method {
             name: "showWarning"
             type: "QVariant"
-            Parameter { name: "mes"; type: "QVariant" }
+            Parameter { name: "text"; type: "QVariant" }
             Parameter { name: "duration"; type: "QVariant" }
+            Parameter { name: "moremsg"; type: "QVariant" }
+        }
+        Method {
+            name: "showError"
+            type: "QVariant"
+            Parameter { name: "text"; type: "QVariant" }
+            Parameter { name: "duration"; type: "QVariant" }
+            Parameter { name: "moremsg"; type: "QVariant" }
         }
         Method {
             name: "showCustom"
             type: "QVariant"
-            Parameter { name: "mes"; type: "QVariant" }
+            Parameter { name: "itemcomponent"; type: "QVariant" }
             Parameter { name: "duration"; type: "QVariant" }
         }
+        Property { name: "children"; type: "QObject"; isList: true; isReadonly: true }
     }
 }

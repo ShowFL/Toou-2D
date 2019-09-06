@@ -2,6 +2,13 @@
 #include "t2d.h"
 
 bool __t2dworld_inited = false;
+/*!
+  \class T2DWorld
+
+  \brief
+
+  \sa T2DWorld
+  */
 T2DWorld::T2DWorld(QQuickItem* parent) : QQuickItem(parent)
 {
     if(__t2dworld_inited){
@@ -15,33 +22,16 @@ T2DWorld::T2DWorld(QQuickItem* parent) : QQuickItem(parent)
     connect(this,&T2DWorld::parentChanged,this,&T2DWorld::onParentChanged);
 }
 
-
-QString T2DWorld::importThemePath() const
+QStringList T2DWorld::getAppThemePaths() const
 {
-    return m_importThemePath;
+    qWarning() << "Please call: TThemeManager.themeList";
+    return QStringList();
 }
 
-QString T2DWorld::globalTheme() const
+QString T2DWorld::getAppStartupTheme() const
 {
-    return m_globalTheme;
-}
-
-void T2DWorld::setImportThemePath(const QString &importThemePath)
-{
-    if (m_importThemePath == importThemePath)
-        return;
-
-    m_importThemePath = importThemePath;
-    emit importThemePathChanged();
-}
-
-void T2DWorld::setGlobalTheme(const QString &globalTheme)
-{
-    if (m_globalTheme == globalTheme)
-        return;
-
-    m_globalTheme = globalTheme;
-    emit globalThemeChanged();
+    qWarning() << "Please call: TThemeManager.appTheme";
+    return QString();
 }
 
 void T2DWorld::onParentChanged()
@@ -49,4 +39,16 @@ void T2DWorld::onParentChanged()
     disconnect(this,&T2DWorld::parentChanged,this,&T2DWorld::onParentChanged);
     T2D::getInstance()->initQuickRoot((QQuickWindow*)parent());
     T2D::getInstance()->initWorld(this);
+}
+
+void T2DWorld::setAppStartupTheme(QString appTheme)
+{
+    T2D::getInstance()->setAppStartupTheme(appTheme);
+}
+
+void T2DWorld::setAppThemePaths(QStringList appThemePaths)
+{
+    foreach (QString path, appThemePaths) {
+        T2D::getInstance()->addAppThemePath(path);
+    }
 }
