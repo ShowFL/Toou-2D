@@ -26,18 +26,6 @@ ThemeBinder::ThemeBinder(QObject *parent) : QObject(parent)
             onRefreshPropertys();
         }
     },Qt::QueuedConnection);
-
-//    connect(this,&ThemeBinder::classNameChanged,this,[=]{
-//        const QMetaObject* metaObj = this->metaObject();
-//        int propertyCnt = metaObj->propertyCount();
-//        for ( int i = 0; i < propertyCnt; ++ i )
-//        {
-//            //QMetaProperty mproperty = metaObj->property(i);
-//            //qDebug() <<"222->"<<mproperty.name() << filterPropertyName();
-//            initialize();
-//        }
-//    },Qt::QueuedConnection);
-
 }
 
 void ThemeBinder::initialize()

@@ -62,14 +62,6 @@ void ThemeHandler::findPropertyValue(const QString &className, const QString& gr
     QVariantMap* group = m_data.value(className);
 
     QStringList checkkeys;
-//    if(groupName.isEmpty()){
-//        checkkeys.append(":" + state);
-//        checkkeys.append(INI_GENERAL_STR);
-//    }else{
-//        checkkeys.append(groupName + ":" + state);
-//        checkkeys.append(groupName);
-//        checkkeys.append(INI_GENERAL_STR);
-//    }
     checkkeys.append(groupName + ":" + state);
     checkkeys.append(":" + state);
     checkkeys.append(groupName);
