@@ -63,3 +63,14 @@ contains(QMAKE_HOST.os,Windows) {
 }else{
     include(./build_macos.pri)
 }
+
+
+warning('-----------------------------')
+warning('Not compatible with older versions please remove manually')
+warning('与旧版本无法兼容请手动删除')
+warning($$[QT_INSTALL_QML]/Toou2D)
+warning('-----------------------------')
+warning('If it does not work, manually copy the files in the build directory bin into the Qt install QML directory')
+warning('如果无法运行，请构建目录bin内文件手动拷贝到 Qt install QML 目录中')
+warning($$[QT_INSTALL_QML]/Toou2D)
+warning('-----------------------------')
