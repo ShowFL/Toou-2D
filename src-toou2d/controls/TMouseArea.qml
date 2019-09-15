@@ -6,7 +6,7 @@ import Toou2D 1.0
 MouseArea{
     id:toou2d_mousearea;
 
-    cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor;
+    cursorShape: enabled ? T2D.mouseAreaCursorShape() : Qt.ArrowCursor;
 
     property bool stateEnabled:true;
 
@@ -53,8 +53,6 @@ MouseArea{
             setState(hoverEnabled && containsMouse ? TStateType.Hovering : TStateType.Normal);
         }
     }
-
-
 
     function setState(val){
         if(!stateEnabled )return;

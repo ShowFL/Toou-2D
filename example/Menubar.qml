@@ -18,7 +18,7 @@ TPopup{
         id:bg
         width: popup.width;
         height: popup.height;
-        x:isopen ? 0 :-width;
+        x:isopen ? 0 : -width;
         theme.groupName: "menubg"
         color:"#3D3D3D"
 
@@ -54,7 +54,7 @@ TPopup{
                     {label:"Control",icon:TAwesomeType.FA_rocket,uri:"qrc:/Control.qml"},
                     {label:"Demo",icon:TAwesomeType.FA_codiepie,uri:"qrc:/Demo.qml"},
                     {label:"Awesome",icon:TAwesomeType.FA_font_awesome,uri:"qrc:/Awesome.qml"},
-                    {label:"Api doc",icon:TAwesomeType.FA_book,uri:"http://www.toou.net/docs/2d/"},
+                    {label:"Api docs",icon:TAwesomeType.FA_book,uri:"http://oss.toou.net/docs/2d/index.html"},
                     {label:"Github",icon:TAwesomeType.FA_github_alt,uri:"https://github.com/ShowFL/Toou-2D"},
                 ]
 
@@ -73,7 +73,6 @@ TPopup{
                         hide(true);
                     }
                 }
-
             }
         }
 
@@ -92,6 +91,7 @@ TPopup{
             }
         }
     }
+
 
 }
 

@@ -105,5 +105,3 @@
     \value Only
            No details are available.
 */
-
-

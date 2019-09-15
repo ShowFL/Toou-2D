@@ -48,5 +48,6 @@
         <file>controls/TIcon.qml</file>
         <file>controls/TPopover.qml</file>
         <file>controls/TDialogBasic.qml</file>
+        <file>controls/TMask.qml</file>
     </qresource>
 </RCC>

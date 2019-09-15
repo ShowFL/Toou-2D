@@ -5,8 +5,9 @@
   \page index.html
   \title Toou2D 1.0
 
+
   \section1 \b Description
-  2D framework based on Qt Quick(Qml) cross-platform technology
+  基于Qt Quick(Qml) 跨平台技术打造的2D框架
 
   \module QtQuick 2.6
 
@@ -30,7 +31,7 @@
       \o \l TGadgetBorder
    \row
       \o \l TGadgetBackground
-      \o
+      \o \l TColor
       \o
    \endtable
 

@@ -1,28 +1,13 @@
 OUTP = $$OUT_PWD/../bin/
-DESTDIR += $$OUTP
 
-COPY_FILELIST += COPY:: $$PWD/build-preset/qmldir TODIR:: \
-                 COPY:: $$PWD/build-preset/plugin.qmltypes TODIR:: \
-                 COPY:: $$PWD/Toou2D.h TODIREND::
+DESTDIR += $$OUTP/Toou2D/
 
 OUTP = $$replace(OUTP, /, \\)
+PRELINK = $$PWD\\win_install.bat PRESET $$PWD $$OUTP NONE
+QMAKE_PRE_LINK += $$replace(PRELINK, /, \\)
 
-COPY_FILELIST = $$replace(COPY_FILELIST, /, \\)
-COPY_FILELIST = $$replace(COPY_FILELIST, COPY::, copy /y)
-COPY_FILELIST = $$replace(COPY_FILELIST, TODIR::, $$OUTP && )
-COPY_FILELIST = $$replace(COPY_FILELIST, TODIREND::, $$OUTP)
-
-QMAKE_POST_LINK += $$COPY_FILELIST
-
-CONFIG(install){
-    CONFIG -= staticlib
-
-    INST_QMLPATH_WIN32 = $$[QT_INSTALL_QML]\Toou2D
-    INST_QMLPATH_WIN32 = $$replace(INST_QMLPATH_WIN32, /, \\)
-
-    !exists($$INST_QMLPATH_WIN32){
-        QMAKE_PRE_LINK += md $$INST_QMLPATH_WIN32
-    }
-
-    QMAKE_POST_LINK += && copy /y $$OUTP*.* $$INST_QMLPATH_WIN32
+CONFIG(sharedlib){
+    INST_QMLPATH = $$[QT_INSTALL_QML]
+    POSTLINK = $$PWD\win_install.bat INSTALL $$PWD $$OUTP $$INST_QMLPATH
+    QMAKE_POST_LINK += $$replace(POSTLINK, /, \\)
 }

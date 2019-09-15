@@ -25,7 +25,6 @@ Rectangle {
         property alias radius:  toou2d_rect.radius;
         property alias opacity: toou2d_rect.opacity;
 
-
         TThemeBinder{
             target:     toou2d_rect.border;
             childName:  "border";
@@ -34,7 +33,9 @@ Rectangle {
             property color color: toou2d_rect.border.color;
         }
 
-       Component.onCompleted: initialize();
+       Component.onCompleted: {
+           initialize();
+       }
     }
 
 }

@@ -27,6 +27,8 @@ Item {
         width: 30;
         height: 10;
         anchors.centerIn: parent;
+
+
     }
 
     Column{
@@ -122,7 +124,6 @@ Item {
                     onClicked: {
                         console.log("download:" ,modelData.url);
                         if(modelData.url){
-
                             Qt.openUrlExternally(modelData.url)
                         }else{
                             TToast.showWarning("Under production",TTimePreset.LongTime4s,"上线时间敬请期待。");
@@ -138,7 +139,7 @@ Item {
         visible: tbi.visible;
         anchors.centerIn: parent;
         anchors.verticalCenterOffset: 50;
-        text: "Data from Github effort loading"
+        text: "数据来自云端，努力加载中"
         font.pixelSize: TPixelSizePreset.PH6
     }
 
@@ -148,7 +149,7 @@ Item {
     }
 
     Component.onCompleted: {
-        TToast.showSuccess("Data from Github",TTimePreset.LongTime4s);
+        TToast.showSuccess("Data from AliCloud.",TTimePreset.LongTime4s);
         worker.sendMessage({'action': 'httpget','version': T2D.version()});
     }
 }

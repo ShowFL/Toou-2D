@@ -46,7 +46,6 @@ Item {
     }
 
     contentComponent: TAvatar{
-        anchors.fill: parent;
         source: modelData.imageSource;
         radius: 10;
         theme.state:     mtheme.state;
@@ -61,8 +60,8 @@ Item {
         interactive:   false;
         preferredHighlightBegin: 0.5;
         preferredHighlightEnd:   0.5;
-        pathItemCount:      toou2d_carousel.pathItemCount;
-        cacheItemCount:     model.count;
+        pathItemCount:   toou2d_carousel.pathItemCount;
+        cacheItemCount:  model.count;
         highlightRangeMode: PathView.StrictlyEnforceRange;
         model: ListModel{}
 
@@ -95,6 +94,9 @@ Item {
         }
 
         Component.onCompleted: {
+            if(chillilst.length >= 3 && pathItemCount < 3){
+                pathItemCount = 3;
+            }
             for(var i in chillilst) pathView.model.append(chillilst[i]);
         }
 

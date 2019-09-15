@@ -3,7 +3,7 @@
 #include <time.h>
 #include <QDebug>
 #if defined(STATICLIB)
-#include <ToouK2D.h>
+#include <Toou2D.h>
 #endif
 
 int main(int argc, char *argv[])
@@ -12,11 +12,16 @@ int main(int argc, char *argv[])
     double totaltime;
     start=clock();
 
+    qputenv("QSG_RENDER_LOOP","basic");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+#if defined(STATICLIB)
+    Toou2D::create(&engine);
+#endif
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

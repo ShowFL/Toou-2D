@@ -1,7 +1,7 @@
 #include "theme_binder.h"
 #include "ThemeManager.h"
 #include <QDebug>
-
+#include <QMetaMethod>
 /*!
   \class ThemeBinder
 
@@ -13,6 +13,7 @@ ThemeBinder::ThemeBinder(QObject *parent) : QObject(parent)
 {
     setEnabled(true);
 
+    m_dynamicListener << "width" << "height" << "x" << "y";
     const QMetaObject* metaObj = this->metaObject();
     int propertyCnt = metaObj->propertyCount();
     for ( int i = 0; i < propertyCnt; ++ i )
@@ -28,35 +29,75 @@ ThemeBinder::ThemeBinder(QObject *parent) : QObject(parent)
     },Qt::QueuedConnection);
 }
 
+void ThemeBinder::onPropertyChanged()
+{
+    QString pname = metaObject()->method(senderSignalIndex()).name();
+    if(pname.contains("Changed")){
+        QString bindingName = QString(pname.mid(0,pname.indexOf("Changed")));
+
+        QVariant result(property(bindingName.toStdString().c_str()).type());
+        QVariant change(property(bindingName.toStdString().c_str()));
+
+        if(!ThemeManager::getInstance()->appThemeInvalid()){
+            mGetThemeDataFromManager(bindingName,result);
+            if(result.isValid() && result == change) return; //don't need change
+        }
+        this->m_binderPropertys[bindingName] = property(bindingName.toStdString().c_str());
+    }
+}
+
+void ThemeBinder::onAppThemeChangedChanged()
+{
+    onRefreshPropertys();
+}
+
 void ThemeBinder::initialize()
 {
     if(!enabled())return;
     const QMetaObject* metaObj = this->metaObject();
+
+    //[1 step]
     int propertyCnt = metaObj->propertyCount();
     for ( int i = 0; i < propertyCnt; ++ i )
     {
         QMetaProperty mproperty = metaObj->property(i);
         if(!m_propertys_initfilter.contains(mproperty.name()) && !m_filterPropertyName.contains(mproperty.name())){
-            if(mproperty.type() == QVariant::String){
-                bindingString(mproperty.name(),this->property(mproperty.name()).toString());
-            }
-            else if(mproperty.type() == QVariant::Color){
-                bindingColor(mproperty.name(),QColor(this->property(mproperty.name()).toString()));
-            }
-            else if(mproperty.type() == QVariant::Double){
-                bindingDouble(mproperty.name(),this->property(mproperty.name()).toDouble());
-            }
-            else if(mproperty.type() == QVariant::Int){
-                bindingInt(mproperty.name(),this->property(mproperty.name()).toInt());
-            }
-            else if(mproperty.type() == QVariant::Bool){
-                bindingBool(mproperty.name(),this->property(mproperty.name()).toBool());
-            }
+            QVariant pv(mproperty.type());
+            pv.setValue(this->property(mproperty.name()));
+            this->m_binderPropertys.insert(mproperty.name(),pv);
         }
     }
 
+    //[2 step]
+    QList<int> bindingindexList;
+    int binderslotIndex = -1;
+    int mCount = metaObj->methodCount();
+    for (int i = 0; i < mCount; ++i) {
+        QMetaMethod m = metaObj->method(i);
+        QString name = QString::fromUtf8( m.name());
+        if (m.methodType() == QMetaMethod::Signal && name.contains("Changed")){
+            QString bindingName = QString(name.mid(0,name.indexOf("Changed")));
+            if(this->m_binderPropertys.contains(bindingName) && m_dynamicListener.contains(bindingName)){
+                bindingindexList.append(m.methodIndex());
+            }
+        }
+        else if(m.methodType() == QMetaMethod::Slot && name == "onPropertyChanged"){
+            binderslotIndex = m.methodIndex();
+        }
+    }
+
+    //[3 step]
+    if(binderslotIndex != -1 && bindingindexList.length() > 0){
+        foreach (int key, bindingindexList) {
+            QMetaObject::connect(this, key, this, binderslotIndex);
+        }
+    }
+
+    //[4 step]
     foreach (ThemeBinder* binder, m_childs) {
         binder->setStateAsynchronous(m_stateAsynchronous);
+        binder->setFilterPropertyName(m_filterPropertyName);
+        //binder->setSendDefaultValue(m_sendDefaultValue);
         binder->setClassName(m_className);
         binder->setGroupName(m_groupName);
         binder->setEnabled(m_enabled);
@@ -65,7 +106,9 @@ void ThemeBinder::initialize()
         binder->initialize();
     }
 
-    onRefreshPropertys();
+    if(!ThemeManager::getInstance()->appThemeInvalid()){
+        onRefreshPropertys();
+    }
 }
 
 void ThemeBinder::setParent(ThemeBinder *parent)
@@ -74,8 +117,10 @@ void ThemeBinder::setParent(ThemeBinder *parent)
         return;
 
     m_parent = parent;
-    emit parentChanged(m_parent);
+    emit parentChanged();
 
+    //setSendDefaultValue(m_parent->sendDefaultValue());
+    setFilterPropertyName(m_parent->filterPropertyName());
     setClassName(m_parent->className());
     setGroupName(m_parent->groupName());
     setEnabled(m_parent->enabled());
@@ -104,11 +149,6 @@ const QString& ThemeBinder::className() const
     return m_className;
 }
 
-const QFont& ThemeBinder::font() const
-{
-    return m_font;
-}
-
 const QString& ThemeBinder::state() const
 {
     return m_state;
@@ -134,11 +174,6 @@ QQmlListProperty<ThemeBinder> ThemeBinder::childs()
     return QQmlListProperty<ThemeBinder>(this, m_childs);
 }
 
-bool ThemeBinder::sendDefaultValue() const
-{
-    return m_sendDefaultValue;
-}
-
 ThemeBinder *ThemeBinder::parent() const
 {
     return m_parent;
@@ -147,6 +182,11 @@ ThemeBinder *ThemeBinder::parent() const
 QStringList ThemeBinder::filterPropertyName() const
 {
     return m_filterPropertyName;
+}
+
+QStringList ThemeBinder::dynamicListener() const
+{
+    return m_dynamicListener;
 }
 
 bool ThemeBinder::stateAsynchronous() const
@@ -160,7 +200,16 @@ void ThemeBinder::setStateAsynchronous(bool stateAsynchronous)
         return;
 
     m_stateAsynchronous = stateAsynchronous;
-    emit stateAsynchronousChanged(m_stateAsynchronous);
+    emit stateAsynchronousChanged();
+}
+
+void ThemeBinder::setDynamicListener(QStringList dynamicListener)
+{
+    if (m_dynamicListener == dynamicListener)
+        return;
+
+    m_dynamicListener = dynamicListener;
+    emit dynamicListenerChanged(m_dynamicListener);
 }
 
 void ThemeBinder::setFilterPropertyName(QStringList filterPropertyName)
@@ -169,16 +218,7 @@ void ThemeBinder::setFilterPropertyName(QStringList filterPropertyName)
         return;
 
     m_filterPropertyName = filterPropertyName;
-    emit filterPropertyNameChanged(m_filterPropertyName);
-}
-
-void ThemeBinder::setSendDefaultValue(bool sendDefaultValue)
-{
-    if (m_sendDefaultValue == sendDefaultValue)
-        return;
-
-    m_sendDefaultValue = sendDefaultValue;
-    emit sendDefaultValueChanged(m_sendDefaultValue);
+    emit filterPropertyNameChanged();
 }
 
 const QString ThemeBinder::childName() const
@@ -192,7 +232,7 @@ void ThemeBinder::setChildName(QString childName)
         return;
 
     m_childName = childName;
-    emit childNameChanged(m_childName);
+    emit childNameChanged();
 }
 
 void ThemeBinder::setTarget(QObject *target)
@@ -216,86 +256,6 @@ void ThemeBinder::setState(const QString &state)
     emit stateChanged();
 }
 
-
-void ThemeBinder::setFont(const QFont &font)
-{
-    if (m_font == font)
-        return;
-
-    m_font = font;
-    emit fontChanged();
-}
-
-int ThemeBinder::bindingInt(const QString &property, int defaultValue)
-{
-    QVariant value;
-    mGetThemeDataFromManager(property,value);
-
-    if(!m_propertys_int.contains(property))
-        m_propertys_int.insert(property,defaultValue);
-
-    if(value.isValid())
-        return value.toInt();
-
-    return defaultValue;
-}
-
-bool ThemeBinder::bindingBool(const QString &property, const bool &defaultValue)
-{
-    QVariant value;
-    mGetThemeDataFromManager(property,value);
-
-    if(!m_propertys_bool.contains(property))
-        m_propertys_bool.insert(property,defaultValue);
-
-    if(value.isValid())
-        return value.toBool();
-
-    return defaultValue;
-}
-
-QString ThemeBinder::bindingString(const QString &property, const QString &defaultValue)
-{
-    QVariant value;
-    mGetThemeDataFromManager(property,value);
-
-    if(!m_propertys_string.contains(property))
-        m_propertys_string.insert(property,defaultValue);
-
-    if(value.isValid())
-        return value.toString();
-
-    return defaultValue;
-}
-
-QColor ThemeBinder::bindingColor(const QString &property, const QColor &defaultValue)
-{
-    QVariant value;
-    mGetThemeDataFromManager(property,value);
-
-    if(!m_propertys_color.contains(property))
-        m_propertys_color.insert(property,defaultValue);
-
-    if(value.isValid())
-        return QColor(value.toString());
-
-    return defaultValue;
-}
-
-double ThemeBinder::bindingDouble(const QString& property, double defaultValue)
-{
-    QVariant value/*(QVariant::Double)*/;
-    mGetThemeDataFromManager(property,value);
-
-    if(!m_propertys_double.contains(property))
-        m_propertys_double.insert(property,defaultValue);
-
-    if(value.isValid())
-        return value.toDouble();
-
-    return defaultValue;
-}
-
 void ThemeBinder::setEnabled(bool enabled)
 {
     if(m_enabled == enabled)
@@ -303,9 +263,9 @@ void ThemeBinder::setEnabled(bool enabled)
 
     m_enabled = enabled;
     if(m_enabled)
-        connect(ThemeManager::getInstance(),&ThemeManager::appThemeChanged,this,&ThemeBinder::onRefreshPropertys);
+        connect(ThemeManager::getInstance(),&ThemeManager::appThemeChanged,this,&ThemeBinder::onAppThemeChangedChanged);
     else
-        disconnect(ThemeManager::getInstance(),&ThemeManager::appThemeChanged,this,&ThemeBinder::onRefreshPropertys);
+        disconnect(ThemeManager::getInstance(),&ThemeManager::appThemeChanged,this,&ThemeBinder::onAppThemeChangedChanged);
 
     emit enabledChanged();
 }
@@ -335,90 +295,44 @@ void ThemeBinder::onRefreshPropertys()
     if(!m_enabled)
         return;
 
-    bool ctne = ThemeManager::getInstance()->appTheme().isEmpty();
     QObject* t = m_target == nullptr ? this : m_target;
+    QMapIterator<QString, QVariant> map(this->m_binderPropertys);
 
-    QMapIterator<QString, int> _int(this->m_propertys_int);
-    while (_int.hasNext()) {
-        _int.next();
+    while (map.hasNext()) {
+        map.next();
 
-        QVariant _int_data ;
-        mGetThemeDataFromManager(_int.key(),_int_data);
-
-        if(_int_data.isValid())
-            t->setProperty(_int.key().toStdString().c_str(),_int_data);
-
-        else if(m_sendDefaultValue || ctne)
-            t->setProperty(_int.key().toStdString().c_str(),_int.value());
-    }
-
-    QMapIterator<QString, bool> _bool(this->m_propertys_bool);
-    while (_bool.hasNext()) {
-        _bool.next();
-
-        QVariant _bool_data ;
-        mGetThemeDataFromManager(_bool.key(),_bool_data);
-
-        if(_bool_data.isValid())
-            t->setProperty(_bool.key().toStdString().c_str(),_bool_data);
-        else if(m_sendDefaultValue || ctne)
-            t->setProperty(_bool.key().toStdString().c_str(),_bool.value());
-    }
-
-    QMapIterator<QString, QString> _string(this->m_propertys_string);
-    while (_string.hasNext()) {
-        _string.next();
-
-        QVariant _string_data ;
-        mGetThemeDataFromManager(_string.key(),_string_data);
-
-        if(_string_data.isValid())
-            t->setProperty(_string.key().toStdString().c_str(),_string_data);
-        else if(m_sendDefaultValue || ctne)
-            t->setProperty(_string.key().toStdString().c_str(),_string.value());
-    }
-
-    QMapIterator<QString, QColor> _color(this->m_propertys_color);
-    while (_color.hasNext()) {
-        _color.next();
-
-        QVariant _color_data ;
-        mGetThemeDataFromManager(_color.key(),_color_data);
-
-        if(_color_data.isValid())
-            t->setProperty(_color.key().toStdString().c_str(),QColor(_color_data.toString()));
-        else if(m_sendDefaultValue || ctne)
-            t->setProperty(_color.key().toStdString().c_str(),_color.value());
-    }
-
-    QMapIterator<QString, double> _double(this->m_propertys_double);
-    while (_double.hasNext()) {
-        _double.next();
-
-        QVariant _double_data ;
-        mGetThemeDataFromManager(_double.key(),_double_data);
-
-        if(_double_data.isValid())
-            t->setProperty(_double.key().toStdString().c_str(),_double_data);
-        else if(m_sendDefaultValue || ctne)
-            t->setProperty(_double.key().toStdString().c_str(),_double.value());
+        if(ThemeManager::getInstance()->appThemeInvalid()){
+            //send default to qml property
+            QVariant result(map.value());
+            t->setProperty(map.key().toStdString().c_str(),result);
+        }else{
+            QVariant result(map.value().type());
+            mGetThemeDataFromManager(map.key(),result);
+            if(result.isValid()){
+                t->setProperty(map.key().toStdString().c_str(),result);
+            }
+        }
     }
 }
 
-void ThemeBinder::mGetThemeDataFromManager(const QString& property,QVariant& value)
+
+bool ThemeBinder::mGetThemeDataFromManager(const QString& property,QVariant& value)
 {
-    if(!m_enabled || m_filterPropertyName.contains(property) || ThemeManager::getInstance()->appThemeInvalid())
-        return;
-
-    if(m_className.isEmpty()){
-        qDebug() << "Warning:Binder className cannot be null." << property;
-        return;
-    }
-
     QString cp = childName();
     if(parent() != nullptr && !parent()->childName().isEmpty()){
         cp = parent()->childName() + "." + cp;
     }
 
+    QString fname = (!cp.isEmpty() ? cp + "." + property : property);
+
+    if(!m_enabled || m_filterPropertyName.contains(fname))
+        return false;
+
+    if(m_className.isEmpty()){
+        qDebug() << "Warning:Binder className cannot be null." << property;
+        return false;
+    }
+
     ThemeManager::getInstance()->getPropertyData(className(),groupName(),cp,state(),property,value);
+    return true;
 }

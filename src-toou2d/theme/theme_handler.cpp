@@ -56,34 +56,33 @@ bool ThemeHandler::isLoad()
 
 void ThemeHandler::findPropertyValue(const QString &className, const QString& groupName,const QString& tpName, const QString& state, const QString& property, QVariant& result)
 {
-    if(!m_data.contains(className)){
-        return ;
-    }
-    QVariantMap* group = m_data.value(className);
+    if(m_data.contains(className)){
+        QVariantMap* group = m_data.value(className);
 
-    QStringList checkkeys;
-    checkkeys.append(groupName + ":" + state);
-    checkkeys.append(":" + state);
-    checkkeys.append(groupName);
-    checkkeys.append(INI_GENERAL_STR);
+        QStringList checkkeys;
+        checkkeys.append(groupName + ":" + state);
+        checkkeys.append(":" + state);
+        checkkeys.append(groupName);
+        checkkeys.append(INI_GENERAL_STR);
 
-    QString pkey = property;
-    if(!tpName.isEmpty()){
-        pkey = tpName + "." + property;
-    }
-
-    //  qDebug() << pkey;
-    foreach (QString key, checkkeys) {
-        QVariantMap childv;
-        if(group->contains(key)){
-            childv = group->value(key).toMap();
+        QString pkey = property;
+        if(!tpName.isEmpty()){
+            pkey = tpName + "." + property;
         }
 
-        if(childv.contains(pkey)){
-            result.setValue(childv.value(pkey));
-            break;
+        foreach (QString key, checkkeys) {
+            QVariantMap childv;
+            if(group->contains(key)){
+                childv = group->value(key).toMap();
+            }
+
+            if(childv.contains(pkey)){
+                result.setValue(childv.value(pkey));
+                return;
+            }
         }
     }
+    result.clear();
 }
 
 const QMap<QString, QVariantMap*> &ThemeHandler::data()
@@ -162,7 +161,7 @@ void ThemeHandler::parseINI(const QString& filename,QVariantMap& varmap)
 
             curgroup = str.mid(gli + 1 , gri - 1);
         }else{
-            QRegExp rx("(.*)=(.*)");
+            QRegExp rx("(.*)=(.*)");  // (.)(.)
             int pot = str.indexOf(rx);
             if(pot != -1){
                 curmap.insert(rx.cap(1).trimmed(), rx.cap(2).trimmed());

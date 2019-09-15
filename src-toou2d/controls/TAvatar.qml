@@ -53,8 +53,6 @@ Item {
         id: sourceImage
         visible:      false;
         enabled:      false;
-        width: 10;
-        height: 10;
         anchors.fill: parent;
         antialiasing: toou2d_avatar.smooth;
         smooth:       toou2d_avatar.smooth;
@@ -72,30 +70,10 @@ Item {
         enabled:      false;
     }
 
-    ShaderEffectSource {
-        id: sou_proxySource
-        live: true
-        hideSource: true
-        visible:    false
-        smooth:     toou2d_avatar.smooth
-        sourceItem: sourceImage
-    }
-
-    ShaderEffectSource {
-        id: mask_proxySource
-        live: true
-        hideSource: true
-        visible:    false
-        smooth:     toou2d_avatar.smooth
-        sourceItem: mask
-    }
-
-    ShaderEffect {
-        id: shaderItem
+    TMask{
         anchors.fill: parent;
-        property variant source: sou_proxySource
-        property variant maskSource: mask_proxySource
-        fragmentShader: "qrc:/net.toou.2d/resource/font/mask.cso"
+        sourceItem: sourceImage;
+        maskItem: mask;
     }
 
     TRectangle{
@@ -110,7 +88,6 @@ Item {
     TThemeBinder{
         id:mtheme;
         className: "TAvatar"
-
         property alias radius: toou2d_avatar.radius;
 
         Component.onCompleted: initialize();

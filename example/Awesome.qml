@@ -40,5 +40,7 @@ Item{
 
     TScrollbarV{
         target: gview
+        anchors.right: parent.right;
+        height: parent.height;
     }
 }

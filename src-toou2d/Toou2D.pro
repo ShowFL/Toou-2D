@@ -6,11 +6,16 @@ TARGET      = $$qtLibraryTarget($$TARGET)
 uri         = Toou2D
 
 ##########################################
-#自动安装qml plugin到Qt qml目录里
-CONFIG      += install
+CONFIG += sharedlib  # staticlib or sharedlib
+#** 多次切换编译构建模式，建议先清理缓存。项目右键->清理
 
-##静态库无法安装到Qt qml目录，需要配置到项目的 .pro中才可以使用
-#CONFIG     += staticlib
+#*[staticlib] 构建静态库.a
+#需要修改example.pro，请打开后按说明操作
+
+#*[sharedlib] 构建动态库 .dll .so .dylib
+#会自动安装到Qt qmlplugin目录中
+#无需其它配置即可运行demo以及其它项目中使用
+#发布目标平台前必须每个平台都要构建一次。
 ##########################################
 
 RESOURCES += \
@@ -34,13 +39,15 @@ HEADERS += \
         controls/gadget/tgadgetbackground.h \
         controls/gadget/tgadgeticon.h \
         controls/gadget/tgadgetscrollbar.h \
-        controls/gadget/tgadgetitem.h
+        controls/gadget/tgadgetitem.h \
+        controls/gadget/tcolor.h
 
 
 SOURCES += \
         qml_plugin.cpp \
         toou2d.cpp \
         t2d.cpp \
+        def.cpp \
         world.cpp \
         theme/theme_binder.cpp \
         theme/theme_handler.cpp \
@@ -53,9 +60,10 @@ SOURCES += \
         controls/gadget/tgadgeticon.cpp \
         controls/gadget/tgadgetscrollbar.cpp \
         controls/gadget/tgadgetitem.cpp \
-    def.cpp
+        controls/gadget/tcolor.cpp
 
-DEFINES += VERSION_IN=\\\"1.0.0\\\"
+
+DEFINES += VERSION_IN=\\\"1.0.1\\\"
 DEFINES += URI_STR=\\\"$$uri\\\"
 
 contains(QMAKE_HOST.os,Windows) {
@@ -64,13 +72,7 @@ contains(QMAKE_HOST.os,Windows) {
     include(./build_macos.pri)
 }
 
-
-warning('-----------------------------')
-warning('Not compatible with older versions please remove manually')
-warning('与旧版本无法兼容请手动删除')
-warning($$[QT_INSTALL_QML]/Toou2D)
-warning('-----------------------------')
-warning('If it does not work, manually copy the files in the build directory bin into the Qt install QML directory')
-warning('如果无法运行，请构建目录bin内文件手动拷贝到 Qt install QML 目录中')
-warning($$[QT_INSTALL_QML]/Toou2D)
-warning('-----------------------------')
+message("-----------------------------")
+message("Toou 技术交流QQ群:244808")
+message("http://www.toou.net")
+message("-----------------------------")

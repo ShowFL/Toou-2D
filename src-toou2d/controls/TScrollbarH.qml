@@ -1,131 +1,287 @@
 import QtQuick 2.6
 import Toou2D  1.0
 
-/* 滚动条-横向
-滚动条可配合 Qt ListView ，Qt Flickable 使用。
- TScrllbarH{
+/* 滚动条-竖向
+滚动条可配合 Qt ListView ，Qt Flickable ,等等使用。
+ TScrllbarV{
     target:listView;
  }
 
 */
 /*! TODO */
-TMouseArea{
-    id:toou2d_scrollbarh
+Item {
+    id:toou2d_scrollbarv;
+    height: 22;
 
-    property var target: parent;
+    property Flickable target: parent;
 
-    property alias hide: _private.hide;
+    //0 - 1
+    property double xPosition: 0;
 
-    property alias theme: theme;
+    //小方块
+    property alias thumb: mgadgetthumb;
 
-    cursorShape: Qt.ArrowCursor;
+    //轨道
+    property alias track: mgadgettrack;
 
-    hoverEnabled: true;
+    //可变小  ，true 启动状态为 narrowed false 启动状态为 full
+    property bool narrowed: true;
 
-    height: 18;
-    y:      target ? target.height - height : 0;
-    width:  target ? target.width : 0;
+    property bool autoHide: false;
+
+    //Too small a height affects drag accuracy
+    property int thumbMinWidth: 30;
+
+    property Component thumbComponent;
+
+    property Component trackComponent;
+
+    property int stateDuration: 1000;
+
+    state: narrowed ? "narrowed" : "full";
+
+    TGadgetBackground{
+        id:mgadgettrack;
+        onWidthChanged:  console.error("Width Invalid setting...");
+        onHeightChanged: console.error("Height Invalid setting...");
+    }
+
+    Loader{
+        id:track;
+        anchors.bottom: parent.bottom;
+        sourceComponent: trackComponent;
+        width:  parent.width;
+        visible: mgadgettrack.visible;
+    }
+
+    Loader{
+        id:thumb
+        anchors.verticalCenter: track.verticalCenter;
+        sourceComponent: thumbComponent;
+        visible: mgadgetthumb.visible;
+        width:   thumbMinWidth;
+    }
+
+    //这些可以不用要了
+    TGadgetBackground{
+        id:mgadgetthumb;
+        onWidthChanged:  console.error("Width Invalid setting...");
+        onHeightChanged: console.error("Height Invalid setting...");
+    }
+
+    MouseArea{
+        id:mouseArea
+        property bool ishold: false;
+
+        property bool isdrag: false;
+
+        property double offset: 0;
+
+        anchors.fill: parent;
+
+        hoverEnabled: true;
+
+        onWheel: {
+        }
+
+        onPressed: {
+            ishold = true;
+            if(mouseX > thumb.x && mouseX < thumb.width + thumb.x){
+                offset  = mouseX - thumb.x;
+                isdrag = true;
+            }else{
+                mprivate.setValue(mouseX - thumb.width / 2)
+            }
+        }
+
+        onReleased: {
+            ishold = false;
+            isdrag = false;
+            if(!containsMouse){
+                stateTimer.rStart();
+            }
+        }
+
+        onEntered: {
+            toou2d_scrollbarv.state = "full";
+            stateTimer.stop();
+        }
+
+        onExited: {
+            if(!ishold)stateTimer.rStart();
+        }
+
+        onMouseXChanged: {
+            if(ishold && isdrag){
+                mprivate.setValue(mouseX - offset)
+            }
+        }
+
+        Component.onCompleted: {
+            mprivate.checkVisible();
+        }
+
+        onIsholdChanged: target.interactive = !ishold;
+    }
+
+    onXPositionChanged: {
+        if(mouseArea.ishold){//drag interior setting
+            target.contentX = (target.contentWidth - target.width) * xPosition;
+        }
+    }
 
     Connections{
-        target: toou2d_scrollbarh.target
-        onContentWidthChanged:toou2d_scrollbarh.visible = target.contentWidth > target.width;
-        onWidthChanged:toou2d_scrollbarh.visible = target.contentWidth > target.width;
-    }
+        target: toou2d_scrollbarv.target;
+        onContentXChanged:{
+            if(!mouseArea.ishold){
+                var t = toou2d_scrollbarv.target;
+                var p = t.contentX / (t.contentWidth - t.width);
+                mprivate.setValue(p * (width - thumb.width))
+            }
 
-    onEntered: {
-        if(target){
-            target.interactive = false;
+            mprivate.restoreVisibleState();
         }
-        block.ishover = true;
-        bg.ishover    = true;
-    }
 
-    onExited: {
-        if(target){
-            target.interactive = true;
-        }
-        if(!_private.isdraging){
-            block.ishover = false;
-            bg.ishover = false;
-        }
-    }
+        onContentWidthChanged:{
+            var t  = toou2d_scrollbarv.target;
+            var nh = t.width / t.contentWidth * toou2d_scrollbarv.width;
+            if(nh > thumbMinWidth){
+                thumb.width = nh;
+            }
 
-    onPressed: {
-        if(mouse.x < block.x){
-            _private.setFlickableContentX(target.contentX - 200);
-        }else if(mouse.x > block.x + block.width){
-            _private.setFlickableContentX(target.contentX + 200);
-        }else{
-            _private.isdraging = true;
-            _private.dX = mouse.x;
+            mprivate.checkVisible();
         }
-    }
 
-    onMouseXChanged: {
-        if(_private.isdraging){
-            var t = ( target.width - target.contentWidth) * (mouseX - _private.dX)/(width - block.width);
-            _private.setFlickableContentX(target.contentX - t);
-            _private.dX = mouseX;
-        }
-    }
-
-    onReleased: {
-        _private.isdraging = false;
-        if(!containsMouse) exited();
+        onWidthChanged:mprivate.checkVisible();
     }
 
     TObject{
-        id:_private
-        property bool isdraging: false;
-        property bool hide: false;
-        property double dX: 0;
-        function setFlickableContentX(value){
-            if(!target)return;
-            if(value < 0)
-                target.contentX = 0;
+        id:mprivate;
 
-            else if(value > target.contentWidth - target.width)
-                target.contentX = target.contentWidth - target.width;
+        function setValue(v){
+            if(v < 0){
+                thumb.x = 0;
+            }else if(v + thumb.width > width){
+                thumb.x = width - thumb.width;
+            }else{
+                thumb.x = v;
+            }
 
-            else
-                target.contentX = value;
+            xPosition = thumb.x / (width -  thumb.width);
+        }
+
+        function checkVisible(){
+            var t = toou2d_scrollbarv.target;
+            if(t){
+                toou2d_scrollbarv.visible = t.contentWidth > t.width;
+                toou2d_scrollbarv.enabled = toou2d_scrollbarv.visible;
+            }
+        }
+
+        function restoreVisibleState(){
+            if(!mouseArea.containsMouse && !mouseArea.ishold && !stateTimer.running){
+                if(toou2d_scrollbarv.narrowed){
+                    toou2d_scrollbarv.state = "narrowed";
+                }else{
+                    toou2d_scrollbarv.state = "full";
+                }
+                stateTimer.rStart();
+            }
         }
     }
 
-    Rectangle{
-        id:bg;
-        property bool ishover: false;
 
-        anchors.fill: parent;
-        color:   theme.bg_color;
-        opacity: theme.bg_opacity;
-        visible: ishover;
+    trackComponent: TRectangle{
+        id:mt
+        state: toou2d_scrollbarv.state;
+        color: "#E5E5E5"
+        opacity: 0.1
+        states: [
+            State {
+                name: "full"
+                PropertyChanges {
+                    target: mt
+                    color:"#5d5d5d"
+                    height: 15;
+                }
+            },
+            State {
+                name: "narrowed"
+                PropertyChanges {
+                    target: mt
+                    height:5;
+                    visible:false;
+                }
+            },
+            State {
+                name: "hide"
+                PropertyChanges {
+                    target: mt
+                    visible:false;
+                }
+            }
+        ]
     }
 
-    Rectangle {
-        id: block
-        property bool ishover: false;
-
-        y:       ishover ? (parent.height - height) / 2 : parent.height - height;
-        x:       target ? target.visibleArea.xPosition * target.width : 0;
-        color:   theme.block_color;
-        height:  ishover ? 8 : 4;
-        width:   target ? target.visibleArea.widthRatio * target.width : 0// ;
-        radius:  height / 2
-        visible: ishover || !_private.hide
-        opacity: ishover ? theme.block_opacity : 0.7;
+    thumbComponent: Rectangle{
+        id:mth
+        state: toou2d_scrollbarv.state;
+        radius: width / 2;
+        color: "#B2B2B2"
+        states: [
+            State {
+                name: "full"
+                PropertyChanges {
+                    target: mth
+                    height:8;
+                }
+            },
+            State {
+                name: "narrowed"
+                PropertyChanges {
+                    target: mth
+                    height:3;
+                }
+            },
+            State {
+                name: "hide"
+                PropertyChanges {
+                    target: mth
+                    visible:false;
+                }
+            }
+        ]
     }
 
-    TThemeBinder{
-        id:theme;
-        className: "TScrollbarV";
+    Timer{
+        id:stateTimer;
+        property bool isrun:  narrowed || autoHide
+        interval: stateDuration; running: isrun ; repeat : true;
+        onTriggered:{
+            if(toou2d_scrollbarv.state === "full"){
+                if(toou2d_scrollbarv.narrowed){
+                    toou2d_scrollbarv.state = "narrowed";
+                }
+                else if(toou2d_scrollbarv.autoHide){
+                    toou2d_scrollbarv.state = "hide";
+                }
+            }
+            else if(toou2d_scrollbarv.state === "narrowed"){
+                if(toou2d_scrollbarv.autoHide){
+                    toou2d_scrollbarv.state = "hide";
+                }
+            }
 
-        state: toou2d_scrollbarh.isdraging ? "draging" : "";
+            if(toou2d_scrollbarv.state === "hide"){
+                stop();
+            }
+        }
 
-        property color  bg_color:   bindingColor("bg_color","#B5B5B5");
-        property double bg_opacity: bindingDouble("bg_opacity",0.1);
-
-        property color  block_color:   bindingColor("block_color","#B5B5B5");
-        property double block_opacity: bindingDouble("block_opacity",1);
+        function rStart(){
+            if(isrun)restart();
+        }
     }
+
+
+
 }

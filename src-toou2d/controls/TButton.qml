@@ -86,7 +86,10 @@ TMouseArea{
 
     contentComponent: TLabel {
         enabled: false;
-        theme.parent: toou2d_button.theme
+        theme.parent: {
+            return toou2d_button_theme;
+        }
+
         theme.childName: "label"
 
         text:   toou2d_button.label.text;

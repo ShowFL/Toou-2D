@@ -3,7 +3,7 @@ var t2d_version;
 WorkerScript.onMessage = function(msg) {
     if (msg.action === 'httpget') {
         t2d_version = msg.version;
-        var url = "https://raw.githubusercontent.com/ShowFL/NetworkDisk/master/Toou2D/demo.json";
+        var url = "http://oss.toou.net/github-resources/2d/demo.json";
         console.log(url);
         httpget(url)
     }

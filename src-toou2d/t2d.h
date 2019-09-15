@@ -28,6 +28,9 @@ public:
 
     void setAppStartupTheme(const QString& themeName);
     void addAppThemePath(const QString& path);
+
+    Q_INVOKABLE int mouseAreaCursorShape();
+    void setMouseAreaCursorShape(Qt::CursorShape cursor);
 signals:
 
 private:
@@ -36,6 +39,8 @@ private:
     QQmlEngine* m_engine        = nullptr;
     QQuickWindow* m_root        = nullptr;
     T2DWorld* m_world           = nullptr;
+
+    Qt::CursorShape  m_mouseAreaCurrsor           = Qt::ArrowCursor;
 };
 
 #endif // T2D_H

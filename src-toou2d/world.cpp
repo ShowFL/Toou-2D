@@ -34,6 +34,16 @@ QString T2DWorld::getAppStartupTheme() const
     return QString();
 }
 
+int T2DWorld::mouseAreaCursorShape() const
+{
+    return T2D::getInstance()->mouseAreaCursorShape();
+}
+
+void T2DWorld::setMouseAreaCursorShape(int mouseAreaCursorShape)
+{
+    T2D::getInstance()->setMouseAreaCursorShape((Qt::CursorShape)mouseAreaCursorShape);
+}
+
 void T2DWorld::onParentChanged()
 {
     disconnect(this,&T2DWorld::parentChanged,this,&T2DWorld::onParentChanged);

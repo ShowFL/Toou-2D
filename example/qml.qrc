@@ -141,5 +141,7 @@
         <file>themes/Solarized/TSwitch.ini</file>
         <file>themes/Solarized/TTag.ini</file>
         <file>themes/Solarized/TToast.ini</file>
+        <file>res/progressbar.png</file>
+        <file>res/progressbg.png</file>
     </qresource>
 </RCC>

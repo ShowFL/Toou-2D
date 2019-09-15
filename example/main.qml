@@ -12,7 +12,8 @@ Window {
       * T2DWorld是T2D框架中最重要的配置
       ***/
     T2DWorld{
-        //appStartupTheme: "Solarized"
+        mouseAreaCursorShape: Qt.PointingHandCursor
+        appStartupTheme: "Dark"
         appThemePaths: [
             "qrc:/themes/"
         ]
@@ -59,8 +60,9 @@ Window {
             width: 160;
             height: rootwindow.height;
             onTopage: {
-                if(title === "Github" || title === "Api doc"){
-                    Qt.openUrlExternally(uri);
+                if(title === "Github" || title === "Api docs"){
+                    openurl_dialog.url = uri;
+                    openurl_dialog.open();
                 }else{
                     pageloader.toPage(uri,title);
                 }
@@ -84,6 +86,16 @@ Window {
 
     Component.onCompleted: {
         TToast.layoutY = 20;
+    }
+
+    TDialog{
+        id:openurl_dialog
+        titleText: "是否打开Url连接";
+        contentText: "前往查看更多详细的内容";
+        property string url;
+        onTriggered: {
+            Qt.openUrlExternally(url);
+        }
     }
 
 }

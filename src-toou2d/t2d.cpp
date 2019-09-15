@@ -7,6 +7,7 @@
 #include "theme/theme_binder.h"
 #include "controls/interface/ttoastitem.h"
 #include "controls/interface/tdialogitem.h"
+#include "controls/gadget/tcolor.h"
 #include "controls/gadget/tgadgetlabel.h"
 #include "controls/gadget/tgadgetborder.h"
 #include "controls/gadget/tgadgetbackground.h"
@@ -52,6 +53,7 @@ void T2D::registerTypes(const char *uri)
 
     qmlRegisterSingletonType<T2D>         (uri,major,minor,"T2D",T2D::exampleQmlSingletonType);
     qmlRegisterSingletonType<ThemeManager>(uri,major,minor,"TThemeManager",ThemeManager::exampleQmlSingletonType);
+    qmlRegisterSingletonType<TColor>      (uri,major,minor,"TColor",TColor::exampleQmlSingletonType);
 
     qmlRegisterType<TGadgetLabel>     (uri,major,minor,"TGadgetLabel");
     qmlRegisterType<TGadgetBorder>    (uri,major,minor,"TGadgetBorder");
@@ -104,6 +106,7 @@ void T2D::registerTypes(const char *uri)
     qmlRegisterType(QUrl("qrc:/net.toou.2d/controls/TPopover.qml")          ,uri,major,minor,"TPopover");
     qmlRegisterType(QUrl("qrc:/net.toou.2d/controls/TPopoverMenu.qml")      ,uri,major,minor,"TPopoverMenu");
     qmlRegisterType(QUrl("qrc:/net.toou.2d/controls/TPopoverElement.qml")   ,uri,major,minor,"TPopoverElement");
+    qmlRegisterType(QUrl("qrc:/net.toou.2d/controls/TMask.qml")             ,uri,major,minor,"TMask");
 
     qmlRegisterSingletonType(QUrl("qrc:/net.toou.2d/controls/TToast.qml")   ,uri,major,minor,"TToast");
 
@@ -146,6 +149,16 @@ void T2D::setAppStartupTheme(const QString &themeName)
 void T2D::addAppThemePath(const QString &path)
 {
     ThemeManager::getInstance()->addAppThemePath(path);
+}
+
+int T2D::mouseAreaCursorShape()
+{
+    return (int)m_mouseAreaCurrsor;
+}
+
+void T2D::setMouseAreaCursorShape(Qt::CursorShape cursor)
+{
+    m_mouseAreaCurrsor = cursor;
 }
 
 QString T2D::awesomeFromKey(const QString &key)

@@ -21,6 +21,8 @@ Item {
 
     property alias theme: toou2d_svgicon_theme;
 
+    property alias status: image.status;
+
     Image {
         id:image
         asynchronous: toou2d_svgicon.asynchronous;
@@ -37,7 +39,8 @@ Item {
         property color   color: toou2d_svgicon.color
         enabled: false;
         fragmentShader: "qrc:/net.toou.2d/resource/font/svg.cso"
-        anchors.fill: parent
+        anchors.fill: parent;
+        visible: toou2d_svgicon.status === Image.Ready;
     }
 
     TThemeBinder{

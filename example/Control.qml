@@ -6,7 +6,12 @@ Item{
         id:loader;
         anchors.fill: parent;
         asynchronous: true
-        sourceComponent: TFlickable{
+        onStatusChanged: bi.visible = status !==Loader.Ready
+    }
+
+    Component{
+        id:contentComponent;
+        TFlickable{
             clip: true
             contentWidth:width;
             contentHeight: layout.height;
@@ -322,12 +327,15 @@ Item{
             }
 
         }
-        onStatusChanged: bi.visible = status !==Loader.Ready
     }
 
     TBusyIndicator{
         id:bi;
         anchors.centerIn: parent;
+    }
+
+    Component.onCompleted: {
+        loader.sourceComponent = contentComponent;
     }
 
 }

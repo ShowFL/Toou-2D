@@ -68,14 +68,16 @@ void ThemeManager::appStartupTheme(const QString &name)
     }
 }
 
-void ThemeManager::getPropertyData(const QString &className, const QString &groupName, const QString &tpName ,const QString &state,const QString &property, QVariant &result)
+bool ThemeManager::getPropertyData(const QString &className, const QString &groupName, const QString &tpName ,const QString &state,const QString &property, QVariant &result)
 {
-    if(appThemeInvalid()) return;
+    if(appThemeInvalid()) return false;
 
     ThemeHandler* theme = m_themes.value(m_themeName);
     if(theme){
         theme->findPropertyValue(className,groupName,tpName,state,property,result);
     }
+
+    return theme != nullptr;
 }
 
 QString ThemeManager::appTheme() const
@@ -113,6 +115,5 @@ void ThemeManager::setAppTheme(const QString& themeName)
             if(sendemit) emit appThemeChanged();
         }
     }
-
     emit appThemeInvalidChanged();
 }

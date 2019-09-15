@@ -28,7 +28,7 @@ public:
 
     void appStartupTheme(const QString& name);
 
-    void getPropertyData(const QString &className, const QString& groupName, const QString &tpName, const QString& state, const QString& property, QVariant& result);
+    bool getPropertyData(const QString &className, const QString& groupName, const QString &tpName, const QString& state, const QString& property, QVariant& result);
 
     QString appTheme() const;
 
