@@ -1,13 +1,23 @@
-OUTP = $$OUT_PWD/../bin/
+OUTP = $$OUT_PWD/../bin/Toou2D
+BUILDBIN_PATH = $$replace(OUTP, src-toou2d/../bin, bin)
+QTQMLT2D_PATH = $$[QT_INSTALL_QML]/Toou2D
+PRESET_PATH = $$PWD/build-preset
+SOLIBFILE_PATH = $$OUT_PWD/libToou2D.so
+ANDROID = NO
 
-DESTDIR += $$OUTP/Toou2D/
+android{
+    ANDROID=YES
+    QMAKE_PRE_LINK *= md $$replace(OUTP, /, \\)
+}else{
+    DESTDIR += $$OUTP
+}
 
-OUTP = $$replace(OUTP, /, \\)
-PRELINK = $$PWD\\win_install.bat PRESET $$PWD $$OUTP NONE
-QMAKE_PRE_LINK += $$replace(PRELINK, /, \\)
+SHAREDSCRIPT = "$$PWD\win_install.bat" SHARED "$$PWD" "$$PRESET_PATH" "$$BUILDBIN_PATH" "$$QTQMLT2D_PATH" $$ANDROID "$$SOLIBFILE_PATH"
+STATICSCRIPT = "$$PWD\win_install.bat" STATIC "$$PWD" "$$PRESET_PATH" "$$BUILDBIN_PATH" "$$QTQMLT2D_PATH" $$ANDROID "$$SOLIBFILE_PATH"
 
 CONFIG(sharedlib){
-    INST_QMLPATH = $$[QT_INSTALL_QML]
-    POSTLINK = $$PWD\win_install.bat INSTALL $$PWD $$OUTP $$INST_QMLPATH
-    QMAKE_POST_LINK += $$replace(POSTLINK, /, \\)
+    QMAKE_POST_LINK *= $$replace(SHAREDSCRIPT, /, \\)
+}
+else{
+    QMAKE_POST_LINK *= $$replace(STATICSCRIPT, /, \\)
 }

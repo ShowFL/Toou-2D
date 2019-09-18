@@ -1,13 +1,23 @@
-SET RUN_TYPE=%1
-SET PRESET_PATH=%2
-SET BUILDER_BIN_PATH=%3
-SET QT_QML_T2D_PATH=%4
 
-if "%RUN_TYPE%"=="PRESET" (
-    copy /y "%PRESET_PATH%\Toou2D.h" "%BUILDER_BIN_PATH%"
-    md %BUILDER_BIN_PATH%\Toou2D\
-    copy /y "%PRESET_PATH%\build-preset\*" "%BUILDER_BIN_PATH%\Toou2D\"
-) else (
-    rmdir /s /q %QT_QML_T2D_PATH%\Toou2D\ & md %QT_QML_T2D_PATH%\Toou2D\
-    copy /y %BUILDER_BIN_PATH%\Toou2D\ %QT_QML_T2D_PATH%\Toou2D\
+SET PWD_PATH=%2
+SET PRESET_PATH=%3
+SET BUILDER_BIN_PATH=%4
+SET QT_QML_T2D_PATH=%5
+SET ANDROID=%6
+SET LIBFILE_PATH=%7
+
+echo %RUN_TYPE%
+echo %PWD_PATH%
+echo %PRESET_PATH%
+echo %BUILDER_BIN_PATH%
+echo %QT_QML_T2D_PATH%
+
+copy /y  %PWD_PATH%\Toou2D.h  %BUILDER_BIN_PATH% & copy /y  %PRESET_PATH%\*  %BUILDER_BIN_PATH%\
+
+if %ANDROID% == YES copy /y %LIBFILE_PATH% %BUILDER_BIN_PATH%
+
+if %1 == SHARED (
+    echo running install to qtqml folder
+    rmdir /s /q %QT_QML_T2D_PATH% & md %QT_QML_T2D_PATH%
+    copy /y %BUILDER_BIN_PATH% %QT_QML_T2D_PATH%
 )
