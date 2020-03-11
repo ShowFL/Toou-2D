@@ -130,29 +130,36 @@ Item {
         }
     }
 
-    Connections{
-        target: toou2d_scrollbarv.target;
-        onContentXChanged:{
-            if(!mouseArea.ishold){
-                var t = toou2d_scrollbarv.target;
-                var p = t.contentX / (t.contentWidth - t.width);
-                mprivate.setValue(p * (width - thumb.width))
-            }
+    Connections {
+        target: toou2d_scrollbarv.target.visibleArea
+        ignoreUnknownSignals: true;
+
+        onXPositionChanged: {
+            var nx = 0, nw = 0;
+            var va = toou2d_scrollbarv.target.visibleArea;
+            nx = va.xPosition   * toou2d_scrollbarv.width;
+            nw = va.widthRatio  * toou2d_scrollbarv.width;;
+
+            if (nx > 2)
+                thumb.x = nx;
+            else
+                thumb.x = 2;
+
+            mprivate.setThumbWidth(nx,nw)
 
             mprivate.restoreVisibleState();
         }
 
-        onContentWidthChanged:{
-            var t  = toou2d_scrollbarv.target;
-            var nh = t.width / t.contentWidth * toou2d_scrollbarv.width;
-            if(nh > thumbMinWidth){
-                thumb.width = nh;
-            }
-
+        onWidthRatioChanged: {
             mprivate.checkVisible();
-        }
 
-        onWidthChanged:mprivate.checkVisible();
+            var nw = 0, nx = 0;
+            var va = toou2d_scrollbarv.target.visibleArea;
+            nw = va.widthRatio * toou2d_scrollbarv.width;
+            nx = va.xPosition   * toou2d_scrollbarv.width;
+
+            mprivate.setThumbWidth(nx,nw)
+        }
     }
 
     TObject{
@@ -168,6 +175,18 @@ Item {
             }
 
             xPosition = thumb.x / (width -  thumb.width);
+        }
+
+        function setThumbWidth(nx,nw) {
+            if (nx > 2) {
+                var t;
+                t = Math.ceil(toou2d_scrollbarv.width - 2 - nx);
+                if (nw > t)
+                    thumb.width = t;
+                else
+                    thumb.width = nw;
+            } else
+                thumb.width = nw + nx;
         }
 
         function checkVisible(){

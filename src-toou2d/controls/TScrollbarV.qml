@@ -57,6 +57,7 @@ Item {
     Loader{
         id:thumb
         anchors.horizontalCenter: track.horizontalCenter;
+        y: 2
         sourceComponent: thumbComponent;
         visible: mgadgetthumb.visible;
         height:  thumbMinHieght;
@@ -133,43 +134,63 @@ Item {
         }
     }
 
-    Connections{
-        target: toou2d_scrollbarv.target;
-        onContentYChanged:{
-            if(!mouseArea.ishold){
-                var t = toou2d_scrollbarv.target;
-                var p = t.contentY / (t.contentHeight - t.height);
-                mprivate.setValue(p * (height - thumb.height))
-            }
+    Connections {
+        target: toou2d_scrollbarv.target.visibleArea
+        ignoreUnknownSignals: true;
+
+        onYPositionChanged: {
+            var ny = 0, nh = 0;
+            var va = toou2d_scrollbarv.target.visibleArea;
+            ny = va.yPosition   * toou2d_scrollbarv.height;
+            nh = va.heightRatio * toou2d_scrollbarv.height;;
+
+            if (ny > 2)
+                thumb.y = ny;
+            else
+                thumb.y = 2;
+
+            mprivate.setThumbHeight(ny,nh)
 
             mprivate.restoreVisibleState();
         }
 
-        onContentHeightChanged:{
-            var t  = toou2d_scrollbarv.target;
-            var nh = t.height / t.contentHeight * toou2d_scrollbarv.height;
-            if(nh > thumbMinHieght){
-                thumb.height = nh;
-            }
+        onHeightRatioChanged: {
             mprivate.checkVisible();
-        }
 
-        onHeightChanged:mprivate.checkVisible();
+            var nh = 0, ny = 0;
+            var va = toou2d_scrollbarv.target.visibleArea;
+            nh = va.heightRatio * toou2d_scrollbarv.height;
+            ny = va.yPosition   * toou2d_scrollbarv.height;
+
+            mprivate.setThumbHeight(ny,nh)
+        }
     }
 
     TObject{
         id:mprivate;
 
         function setValue(v){
-            if(v < 0){
-                thumb.y = 0;
-            }else if(v + thumb.height > height){
-                thumb.y = height - thumb.height;
+            if(v < 2){
+                thumb.y = 2;
+            }else if(v + thumb.height > height - 2){
+                thumb.y = height - thumb.height - 2;
             }else{
                 thumb.y = v;
             }
 
             yPosition = thumb.y / (height -  thumb.height);
+        }
+
+        function setThumbHeight(ny,nh) {
+            if (ny > 2) {
+                var t;
+                t = Math.ceil(toou2d_scrollbarv.height - 2 - ny);
+                if (nh > t)
+                    thumb.height = t;
+                else
+                    thumb.height = nh;
+            } else
+                thumb.height = nh + ny;
         }
 
         function checkVisible(){
