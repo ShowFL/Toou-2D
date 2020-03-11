@@ -40,6 +40,10 @@ MouseArea{
         }
     }
 
+    onCanceled: {
+        setState(TStateType.Normal);
+    }
+
     onPressed: {
         setState(TStateType.Pressed);
         if(takeFocus) focus = true;
