@@ -38,6 +38,7 @@ TPopover{
     padding: 8;
 
     bodyWidth: 150;
+    property int itemHeight: 30;
 
     bodyComponent: menubodyComponent;
 
@@ -81,6 +82,7 @@ TPopover{
     TGadgetIcon{
         id:mItemIcon
     }
+
 
     TGadgetIcon{
         id:mActItemIcon
@@ -175,7 +177,7 @@ TPopover{
         id:defaultItemComponent;
         Item{
             property bool active: _mprivate.actieIndex === modelIndex;
-            height: 26;
+            height: toou2d_popover.itemHeight;
             TRectangle{
                 anchors.fill: parent;
                 color:  mItemBg.color;

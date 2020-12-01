@@ -1696,6 +1696,7 @@ Module {
         Property { name: "activeItemLabel"; type: "TGadgetLabel"; isReadonly: true; isPointer: true }
         Property { name: "itemIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
         Property { name: "activeItemIcon"; type: "TGadgetIcon"; isReadonly: true; isPointer: true }
+		Property { name: "itemHeight"; type:"int"; isReadonly: true; isPointer: true } 
         Signal {
             name: "triggered"
             Parameter { name: "modelData"; type: "QVariant" }
