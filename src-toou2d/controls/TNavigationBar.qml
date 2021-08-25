@@ -66,18 +66,19 @@ Item {
         backgroundComponent: null;
         theme.enabled: false;
 
-        label.text : modelData.text ?  modelData.text : modelData.index;
+        label.text : modelData_p.text ?  modelData_p.text : modelData_p.index;
         label.color: isActiveItem ? mactiveLabel.color : mlabel.color;
         label.font:  isActiveItem ? mactiveLabel.font  : mlabel.font;
 
-        icon.source: modelData.iconSource;
+        icon.source: modelData_p.iconSource;
         icon.color:  isActiveItem  ? mactiveIcon.color  : micon.color;
         icon.width:  isActiveItem  ? mactiveIcon.width  : micon.width;
         icon.height: isActiveItem  ? mactiveIcon.height : micon.height;
+        icon.position: isActiveItem  ? mactiveIcon.position : micon.position;
 
         onClicked: {
-            toou2d_navigationbar.currentIndex = modelData.index;
-            triggered(modelData);
+            toou2d_navigationbar.currentIndex = index_p;
+            triggered(modelData_p);
         }
 
         Timer {
@@ -104,6 +105,7 @@ Item {
     TGadgetIcon{
         id:micon;
         color: "#303133"
+        position: TPosition.Left
     }
 
     TGadgetIcon{
@@ -111,6 +113,7 @@ Item {
         color: "#000"
         width: 20;
         height: 20;
+        position: TPosition.Left
     }
 
     TObject{
@@ -124,9 +127,11 @@ Item {
         spacing: toou2d_navigationbar.spacing;
         Repeater{
             id:repeater
-            model: ListModel{ }
+            model: []
             delegate: Loader{
-                property var  modelData:    model;
+                property var  modelData_p:  modelData;
+                property var  index_p: index;
+
                 property bool isActiveItem: toou2d_navigationbar.currentIndex === index;
 
                 anchors.verticalCenter: parent.verticalCenter;
@@ -136,8 +141,12 @@ Item {
     }
 
     Component.onCompleted: {
-        for(var i in _private.elements) repeater.model.append(_private.elements[i]);
+        var a = []
+        for(var i in _private.elements) a.push(_private.elements[i]);
+        repeater.model = a;
+
         if(_private.elements.length > 0 && currentIndex === -1) currentIndex = 0;
+
     }
 
     TThemeBinder{
